@@ -1,8 +1,6 @@
-package com.edenchengsc.covidstatsaroundus.DomainClass;
+package com.edenchengsc.covidstatsaroundus.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SingleCountySummary {

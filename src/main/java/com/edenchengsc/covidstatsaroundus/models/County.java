@@ -1,4 +1,4 @@
-package com.edenchengsc.covidstatsaroundus.DomainClass;
+package com.edenchengsc.covidstatsaroundus.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
