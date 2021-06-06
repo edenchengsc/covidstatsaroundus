@@ -2,6 +2,7 @@ package com.edenchengsc.covidstatsaroundus.service;
 
 import com.edenchengsc.covidstatsaroundus.CovidStatsAroundUsApplication;
 import com.edenchengsc.covidstatsaroundus.models.County;
+import com.edenchengsc.covidstatsaroundus.models.State;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -23,6 +24,12 @@ public class CovidDataService {
         return allCountyStats;
     }
 
+    private List<State> allStateStats = new ArrayList<>();
+
+    public List<State> getStateStats(){
+        return allStateStats;
+    }
+
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
         return builder.build();
@@ -38,6 +45,12 @@ public class CovidDataService {
             allCountyStats = Arrays.asList(countyStats.clone());
 
 
+            State[]  stateStats = restTemplate.getForObject(
+                    "https://api.covidactnow.org/v2/states.json?apiKey=e2592af2a51a42f6acedbe547a95e0da", State[].class);
+
+            log.info(stateStats.toString());
+
+            allStateStats = Arrays.asList(stateStats.clone());
         };
     }
 }
