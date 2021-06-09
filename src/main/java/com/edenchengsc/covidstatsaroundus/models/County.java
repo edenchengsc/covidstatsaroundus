@@ -9,6 +9,9 @@ public class County {
     private String country;
     private int population;
     private Metrics metrics;
+    private Actuals actuals;
+
+    private String lastUpdatedDate;
 
     public String getState() {
         return state;
@@ -49,6 +52,22 @@ public class County {
 
     public void setMetrics(Metrics metrics) {
         this.metrics = metrics;
+    }
+
+    public Actuals getActuals() {
+        return actuals;
+    }
+
+    public void setActuals(Actuals actuals) {
+        this.actuals = actuals;
+    }
+
+    public String getLastUpdatedDate() {
+        return lastUpdatedDate;
+    }
+
+    public void setLastUpdatedDate(String lastUpdatedDate) {
+        this.lastUpdatedDate = lastUpdatedDate;
     }
 
     @Override

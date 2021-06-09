@@ -4,7 +4,35 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Metrics {
+    private float testPositivityRatio;
+    private float caseDensity;
+    private float infectionRate;
     private float vaccinationsInitiatedRatio;
+    private float vaccinationsCompletedRatio;
+
+    public float getTestPositivityRatio() {
+        return testPositivityRatio;
+    }
+
+    public void setTestPositivityRatio(float testPositivityRatio) {
+        this.testPositivityRatio = testPositivityRatio;
+    }
+
+    public float getCaseDensity() {
+        return caseDensity;
+    }
+
+    public void setCaseDensity(float caseDensity) {
+        this.caseDensity = caseDensity;
+    }
+
+    public float getInfectionRate() {
+        return infectionRate;
+    }
+
+    public void setInfectionRate(float infectionRate) {
+        this.infectionRate = infectionRate;
+    }
 
     public float getVaccinationsInitiatedRatio() {
         return vaccinationsInitiatedRatio;
@@ -22,7 +50,7 @@ public class Metrics {
         this.vaccinationsCompletedRatio = vaccinationsCompletedRatio;
     }
 
-    private float vaccinationsCompletedRatio;
+
 
 
 }

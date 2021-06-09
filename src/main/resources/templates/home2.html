@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>High Chart</title>
+</head>
+<body>
+<div aligh="center">
+    <h1>Covid City Tracker Application -  <b>Washington</b></h1>
+    <p>This application lists the current number of cases reported across the US</p>
+
+    <div class="jumbotron">
+        <h1 class="display-4" th:text="${totalReportedCases}"></h1>
+        <p class="lead">Total cases reported as of today</p>
+        <hr class="my-4">
+        <p>
+            <span>New Cases reported in the last 24 hours: </span>
+            <span th:text="${newCases}"></span>
+            <span>New Death reported in the last 24 hours: </span>
+            <span th:text="${newDeath}"></span>
+        </p>
+    </div>
+
+    <table class="table">
+        <tr>
+            <th>county</th>
+            <th>Total cases reported</th>
+            <th>Total Deaths reported</th>
+            <th>New cases yesterday</th>
+            <th>New Deaths yesterday</th>
+            <th>Test Positivity Ratio</th>
+            <th>Case Density</th>
+            <th>InfectionRate</th>
+            <th>Vaccinations Initiated Ratio</th>
+            <th>Vaccinations Completed Ratio</th>
+        </tr>
+        <tr th:each="counties : ${counties}">
+            <td th:text="${counties.county}"></td>
+            <td th:text="${counties.totalCases}"></td>
+            <td th:text="${counties.totalDeaths}"></td>
+            <td th:text="${counties.newCases}"></td>
+            <td th:text="${counties.newDeath}"></td>
+            <td th:text="${counties.testPositivityRatio}"></td>
+            <td th:text="${counties.caseDensity}"></td>
+            <td th:text="${counties.infectionRate}"></td>
+            <td th:text="${counties.vaccinationsInitiatedRatio}"></td>
+            <td th:text="${counties.vaccinationsCompletedRatio}"></td>
+        </tr>
+    </table>
+    </table>
+</div>
+
+</body>
+</html>

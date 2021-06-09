@@ -36,7 +36,7 @@ public class GraphController {
 
         model.addAttribute("keySet", data.keySet());
         model.addAttribute("values", data.values());
-
+        model.addAttribute ("lastUpdatedDate",allCountyStats.get(0).getLastUpdatedDate());
         return "barChart";
     }
 
