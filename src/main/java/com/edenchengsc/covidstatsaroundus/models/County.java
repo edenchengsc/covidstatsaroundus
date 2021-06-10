@@ -9,8 +9,27 @@ public class County {
     private String country;
     private int population;
     private Metrics metrics;
+
+    public Metrics[] getMetricsTimeseries() {
+        return metricsTimeseries;
+    }
+
+    public void setMetricsTimeseries(Metrics[] metricsTimeseries) {
+        this.metricsTimeseries = metricsTimeseries;
+    }
+
+    private Metrics[] metricsTimeseries;
     private Actuals actuals;
 
+    public Actuals[] getActualsTimeseries() {
+        return actualsTimeseries;
+    }
+
+    public void setActualsTimeseries(Actuals[] actualsTimeseries) {
+        this.actualsTimeseries = actualsTimeseries;
+    }
+
+    private Actuals[] actualsTimeseries;
     private String lastUpdatedDate;
 
     public String getState() {

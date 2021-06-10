@@ -52,11 +52,20 @@ public class Actuals {
         this.getVaccinationsCompleted = getVaccinationsCompleted;
     }
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String Date) {
+        this.date = Date;
+    }
+
     private int cases;
     private int deaths;
     private int newCases;
     private int newDeaths;
     private int vaccinationsInitiated;
     private int getVaccinationsCompleted;
+    public String date;
 
 }

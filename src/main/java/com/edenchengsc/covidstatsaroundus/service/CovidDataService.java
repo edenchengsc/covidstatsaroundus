@@ -1,6 +1,7 @@
 package com.edenchengsc.covidstatsaroundus.service;
 
 import com.edenchengsc.covidstatsaroundus.CovidStatsAroundUsApplication;
+import com.edenchengsc.covidstatsaroundus.models.Actuals;
 import com.edenchengsc.covidstatsaroundus.models.County;
 import com.edenchengsc.covidstatsaroundus.models.Metrics;
 import com.edenchengsc.covidstatsaroundus.models.State;
@@ -24,18 +25,39 @@ import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class CovidDataService {
 
+    public String FILE_DIR = "C:\\Users\\edenchengshu\\OneDrive\\Documents\\GitHub\\covidstatsaroundus\\jsonFile";
+    private static String APIKEY = "e2592af2a51a42f6acedbe547a95e0da";
+
     private static final Logger log = LoggerFactory.getLogger(CovidStatsAroundUsApplication.class);
 
     private List<County> allCountyStats = new ArrayList<>();
+
+    public County getSpecifiedCounty() {
+        return specifiedCounty;
+    }
+
+    public void setSpecifiedCounty(County specifiedCounty) {
+        this.specifiedCounty = specifiedCounty;
+    }
+
+    private County specifiedCounty = new County();
+
+    public List<Actuals> getSpecifiedCountyActualsTimeseries() {
+        return specifiedCountyActualsTimeseries;
+    }
+
+    public void setSpecifiedCountyActualsTimeseries(List<Actuals> specifiedCountyActualsTimeseries) {
+        this.specifiedCountyActualsTimeseries = specifiedCountyActualsTimeseries;
+    }
+
+    public List<Actuals> specifiedCountyActualsTimeseries = new ArrayList<>();
 
     public List<County> getCounties(){
         return allCountyStats;
@@ -47,84 +69,72 @@ public class CovidDataService {
         return allStateStats;
     }
 
-    @Bean
-    public RestTemplate restTemplate(RestTemplateBuilder builder) {
-        return builder.build();
+
+    public Map<String, String> apiURL_Files = new HashMap<>();
+
+    private void setApiFiles() {
+       //this.apiURL_Files.put("single_county_summary.json", "https://api.covidactnow.org/v2/county/{fips}.json?apiKey={apiKey}");
+        this.apiURL_Files.put("Single_County_Timeseries.json", "https://api.covidactnow.org/v2/county/{fips}.timeseries.json?apiKey={apiKey}");
+    }
+
+    private String formatURL(String url){
+        if(url.contains("{fips}")){
+            url = url.replace("{fips}", "53033"); // 53033 king county
+        }
+        return url.replace("{apiKey}", APIKEY);
     }
 
     @Bean
-    public CommandLineRunner run(RestTemplate restTemplate) throws Exception {
+    public CommandLineRunner run() throws Exception {
         return args -> {
+            setApiFiles();
+            checkJsonFiles();
 
-            download("https://api.covidactnow.org/v2/state/WA.timeseries.csv?apiKey=e2592af2a51a42f6acedbe547a95e0da",
-                    "C:\\Users\\edenchengshu\\OneDrive\\Desktop\\EdenProjectFile",
-                    "Single_State_Timeseries_CSV.csv");
-            download("https://api.covidactnow.org/v2/states.csv?apiKey=e2592af2a51a42f6acedbe547a95e0da",
-                    "C:\\Users\\edenchengshu\\OneDrive\\Desktop\\EdenProjectFile",
-                    "All_States_Summary_CSV.csv");
-
-            download("https://api.covidactnow.org/v2/county/WA.json?apiKey=e2592af2a51a42f6acedbe547a95e0da",
-                    "C:\\Users\\edenchengshu\\OneDrive\\Desktop\\EdenProjectFile",
-                    "county_summary.json");
-
-//            List<County> counties = new ArrayList<>();
-//            Reader reader = Files.newBufferedReader(Paths.get("C:\\Users\\edenchengshu\\OneDrive\\Desktop\\EdenProjectFile\\All_States_Summary_CSV.csv"));
-//            CSVParser csvParser = new CSVParser(reader, CSVFormat.EXCEL.withHeader());
-//
-//            for (CSVRecord record : csvParser) {
-//                //if (record.get("county").equals("King County")) {
-//                    County county = new County();
-//
-//                    county.setCounty(record.get("state"));
-//                    county.setLastUpdatedDate(record.get("lastUpdatedDate"));
-//                    Metrics metrics = new Metrics();
-//                    metrics.setVaccinationsCompletedRatio(Float.parseFloat(record.get("metrics.vaccinationsCompletedRatio")));
-//                    county.setMetrics(metrics);
-//                    counties.add(county);
-//                    System.out.println(county.getLastUpdatedDate());
-//               // }
-//            }
-//            this.allCountyStats = counties;
-
-
+            // Single county data
             try {
                 ObjectMapper mapper = new ObjectMapper();
-                String fileName = "C:\\Users\\edenchengshu\\OneDrive\\Desktop\\EdenProjectFile\\county_summary.json";
+                String fileName = FILE_DIR + File.separator + "Single_County_Timeseries.json";
                 InputStream jsonFileStream = new FileInputStream(fileName);
-                County[] countyStats = (County[]) mapper.readValue(jsonFileStream, County[].class);
-
-                log.info(countyStats.toString());
-                allCountyStats = Arrays.asList(countyStats.clone());
+                County county = (County) mapper.readValue(jsonFileStream, County.class);
+                log.info(county.toString());
+                this.specifiedCounty = county;
+                this.specifiedCountyActualsTimeseries = Arrays.stream(county.getActualsTimeseries())
+                        .filter(a -> a.getDate().startsWith("2021-05"))
+                        .collect(Collectors.toList());
+                log.info("specifiedCountyActualsTimeseries : " + this.specifiedCountyActualsTimeseries.size());
             } catch (Exception e){
                 log.info("Exceptions here: " + e.toString());
             }
 
-//            //handle json
-//            County[] countyStats = restTemplate.getForObject(
-//                    "https://api.covidactnow.org/v2/county/WA.json?apiKey=e2592af2a51a42f6acedbe547a95e0da", County[].class);
-//            log.info(countyStats.toString());
-//            allCountyStats = Arrays.asList(countyStats.clone());
-//            State[]  stateStats = restTemplate.getForObject(
-//                    "https://api.covidactnow.org/v2/states.json?apiKey=e2592af2a51a42f6acedbe547a95e0da", State[].class);
-//            log.info(stateStats.toString());
-//            allStateStats = Arrays.asList(stateStats.clone());
+            //Single County Timeseries
+
         };
     }
 
-    private static Path download(String sourceURL, String targetDirectory, String fileName) throws IOException
+    /*
+     Check if the .json files are local ready.
+     If not or too old, download again
+     */
+    public void checkJsonFiles() throws IOException
     {
-        URL url = new URL(sourceURL);
-       //String fileName = sourceURL.substring(sourceURL.lastIndexOf('/') + 1, sourceURL.lastIndexOf('?'));
-        File file = new File(targetDirectory + File.separator + fileName);
-        Path targetPath = file.toPath();
-        if(file.createNewFile()){
-            System.out.println(targetPath +" File Created");
-        }else {
-            System.out.println("File "+ targetPath +" already exists");
+        //String sourceURL, String targetDirectory, String fileName
+        for(String fileName : this.apiURL_Files.keySet()){
+            File file = new File(FILE_DIR + File.separator + fileName);
+            if(file.exists()){
+                long diff = new Date().getTime() - file.lastModified();
+                if (diff < 24){
+                     System.out.println("Latest version exists: " + fileName);
+                     continue;
+                }
+            }
+            URL url = new URL(formatURL(this.apiURL_Files.get(fileName)));
+            Path targetPath = file.toPath();
+            if(file.createNewFile()){
+                System.out.println(targetPath +" File Created");
+            }else {
+                System.out.println("File "+ targetPath +" already exists");
+            }
+            Files.copy(url.openStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
         }
-
-        Files.copy(url.openStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
-
-        return targetPath;
     }
 }

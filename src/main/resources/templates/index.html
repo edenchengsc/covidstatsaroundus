@@ -18,224 +18,42 @@
             <h3>
                 Adams County, WA
             </h3>
-            <h3>
-                Updated on <span th:text="${lastUpdatedDate}"></span>
-            </h3>
-        </div>
-    </div>
-    <div class="row clearfix">
-        <div class="col-md-12 column">
-            <div class="row clearfix">
-                <div class="col-md-4 column">
-                </div>
-                <div class="col-md-4 column">
-                </div>
-                <div class="col-md-4 column">
-                </div>
-            </div>
-            <div class="row clearfix">
-                <div class="col-md-4 column">
-                </div>
-                <div class="col-md-4 column">
-                </div>
-                <div class="col-md-4 column">
-                </div>
-            </div>
-            <div class="row clearfix">
-                <div class="col-md-4 column">
-                </div>
-                <div class="col-md-4 column">
-                </div>
-                <div class="col-md-4 column">
-                </div>
-            </div>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>
-                        编号
-                    </th>
-                    <th>
-                        产品
-                    </th>
-                    <th>
-                        交付时间
-                    </th>
-                    <th>
-                        状态
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>
-                        1
-                    </td>
-                    <td>
-                        TB - Monthly
-                    </td>
-                    <td>
-                        01/04/2012
-                    </td>
-                    <td>
-                        Default
-                    </td>
-                </tr>
-                <tr class="success">
-                    <td>
-                        1
-                    </td>
-                    <td>
-                        TB - Monthly
-                    </td>
-                    <td>
-                        01/04/2012
-                    </td>
-                    <td>
-                        Approved
-                    </td>
-                </tr>
-                <tr class="error">
-                    <td>
-                        2
-                    </td>
-                    <td>
-                        TB - Monthly
-                    </td>
-                    <td>
-                        02/04/2012
-                    </td>
-                    <td>
-                        Declined
-                    </td>
-                </tr>
-                <tr class="warning">
-                    <td>
-                        3
-                    </td>
-                    <td>
-                        TB - Monthly
-                    </td>
-                    <td>
-                        03/04/2012
-                    </td>
-                    <td>
-                        Pending
-                    </td>
-                </tr>
-                <tr class="info">
-                    <td>
-                        4
-                    </td>
-                    <td>
-                        TB - Monthly
-                    </td>
-                    <td>
-                        04/04/2012
-                    </td>
-                    <td>
-                        Call in to confirm
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <div class="row clearfix">
-        <div class="col-md-12 column">
-        </div>
-    </div>
-    <div class="row clearfix">
-        <div class="col-md-6 column">
-        </div>
-        <div class="col-md-6 column">
-        </div>
-    </div>
-    <div class="row clearfix">
-        <div class="col-md-12 column">
-            <nav class="navbar navbar-default" role="navigation">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="#">Brand</a>
-                </div>
+            Updated on <span th:text="${lastUpdatedDate}"></span>
 
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav">
-                        <li class="active">
-                            <a href="#">Link</a>
-                        </li>
-                        <li>
-                            <a href="#">Link</a>
-                        </li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown<strong class="caret"></strong></a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a href="#">Action</a>
-                                </li>
-                                <li>
-                                    <a href="#">Another action</a>
-                                </li>
-                                <li>
-                                    <a href="#">Something else here</a>
-                                </li>
-                                <li class="divider">
-                                </li>
-                                <li>
-                                    <a href="#">Separated link</a>
-                                </li>
-                                <li class="divider">
-                                </li>
-                                <li>
-                                    <a href="#">One more separated link</a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <form class="navbar-form navbar-left" role="search">
-                        <div class="form-group">
-                            <input type="text" class="form-control" />
-                        </div> <button type="submit" class="btn btn-default">Submit</button>
-                    </form>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a href="#">Link</a>
-                        </li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown<strong class="caret"></strong></a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a href="#">Action</a>
-                                </li>
-                                <li>
-                                    <a href="#">Another action</a>
-                                </li>
-                                <li>
-                                    <a href="#">Something else here</a>
-                                </li>
-                                <li class="divider">
-                                </li>
-                                <li>
-                                    <a href="#">Separated link</a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
+            <div class="row clearfix">
+                <div class="col-md-10 column">
+                    <div class="col-md-3 column">
+                        testPositivityRatio: <span th:text="${testPositivityRatio}"></span>
+                    </div>
+                    <div class="col-md-3 column">
+                        infectionRate: <span th:text="${infectionRate}"></span>
+                    </div>
+                    <div class="col-md-3 column">
+                        vaccinationsInitiatedRatio: <span th:text="${vaccinationsInitiatedRatio}"></span>
+                    </div>
+                    <div class="col-md-3 column">
+                        vaccinationsCompletedRatio: <span th:text="${vaccinationsCompletedRatio}"></span>
+                    </div>
                 </div>
-
-            </nav>
-            <div class="jumbotron">
-                <h1>
-                    Hello, world!
-                </h1>
-                <p>
-                    This is a template for a simple marketing or informational website. It includes a large callout called the hero unit and three supporting pieces of content. Use it as a starting point to create something more unique.
-                </p>
-                <p>
-                    <a class="btn btn-primary btn-large" href="#">Learn more</a>
-                </p>
+                <div class="col-md-2 column">
+                </div>
             </div>
-        </div>
+<!--            <div class="row clearfix">-->
+<!--                <div id="barChartContainer" style="width: 550px; height: 400px; margin: 0 auto">  </div>-->
+<!--            </div>-->
+
+            <div class="row clearfix">
+                <div class="col-md-6 column" id="newCaseLineChartContainer"
+                     style="width: 500px; height: 400px; margin: 0 auto">
+                </div>
+                <div class="col-md-6 column" id="newDeathLineChartContainer"
+                     style="width: 500px; height: 400px; margin: 0 auto">
+                </div>
+            </div>
+
     </div>
+</div>
+
     <div class="row clearfix">
         <div class="col-md-4 column">
             <h2>
@@ -245,7 +63,7 @@
                 Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
             </p>
             <p>
-                <a class="btn" href="#">View details »</a>
+                <a class="btn" href="#">View details �</a>
             </p>
         </div>
         <div class="col-md-4 column">
@@ -256,7 +74,7 @@
                 Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
             </p>
             <p>
-                <a class="btn" href="#">View details »</a>
+                <a class="btn" href="#">View details �</a>
             </p>
         </div>
         <div class="col-md-4 column">
@@ -267,7 +85,7 @@
                 Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
             </p>
             <p>
-                <a class="btn" href="#">View details »</a>
+                <a class="btn" href="#">View details �</a>
             </p>
         </div>
     </div>
@@ -284,18 +102,24 @@
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script th:inline="javascript">
     $(function(){
-    Highcharts.chart('container', {
-        chart: {
-            type: 'bar'
-        },
+      Highcharts.chart('newCaseLineChartContainer', {
+
         title: {
-            text: 'Organization'
+            text: 'Solar Employment Growth by Sector, 2010-2016'
         },
+
         subtitle: {
-            text: 'Details'
+            text: 'Source: thesolarfoundation.com'
         },
+
+        yAxis: {
+            title: {
+                text: 'Number of Employees'
+            }
+        },
+
         xAxis: {
-            categories: [[${keySet}]],
+            categories: [[${Dates}]],
             crosshair: true,
             labels: {
                  style: {
@@ -303,21 +127,19 @@
                          }
             }
         },
-        yAxis: {
-            min: 0,
-            max:100,
-            title: {
-                text: 'Percentage'
-            }
-        },
 
-        tooltip: {
-            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-            '<td style="padding:0"><b>{point.y:.1f}%</b></td></tr>',
-            footerFormat: '</table>',
-            shared: true,
-            useHTML: true
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle'
+        },
+        plotOptions: {
+                series: {
+                    label: {
+                        connectorAllowed: false
+                    },
+                    pointStart: 0
+                }
         },
 
         plotOptions: {
@@ -331,12 +153,100 @@
                 borderWidth: 0
             }
         },
+
+        series: [{name: 'New Cases',
+                data: [[${NewCases}]]
+                }],
+
+        responsive: {
+            rules: [{
+                condition: {
+                    maxWidth: 500
+                },
+                chartOptions: {
+                    legend: {
+                        layout: 'horizontal',
+                        align: 'center',
+                        verticalAlign: 'bottom'
+                    }
+                }
+            }]
+        }
+        });
+
+        Highcharts.chart('newDeathLineChartContainer', {
+
+        title: {
+            text: 'Solar Employment Growth by Sector, 2010-2016'
+        },
+
+        subtitle: {
+            text: 'Source: thesolarfoundation.com'
+        },
+
+        yAxis: {
+            title: {
+                text: 'Number of Employees'
+            }
+        },
+
+        xAxis: {
+            categories: [[${Dates}]],
+            crosshair: true,
+            labels: {
+                 style: {
+                          fontSize: '5px'
+                         }
+            }
+        },
+
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle'
+        },
+        plotOptions: {
+                series: {
+                    label: {
+                        connectorAllowed: false
+                    },
+                    pointStart: 0
+                }
+        },
+
+        plotOptions: {
+            bar: {
+                dataLabels: {
+                    enabled: true
+                }
+            },
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+
         series: [{
-            name: 'County',
-            data: [[${values}]]
-        }]
-      });
-    });
+                 name: 'New Deaths',
+                 data: [[${NewDeaths}]]
+            }],
+
+        responsive: {
+            rules: [{
+                condition: {
+                    maxWidth: 500
+                },
+                chartOptions: {
+                    legend: {
+                        layout: 'horizontal',
+                        align: 'center',
+                        verticalAlign: 'bottom'
+                    }
+                }
+            }]
+        }
+   });
+});
 </script>
 
 </html>

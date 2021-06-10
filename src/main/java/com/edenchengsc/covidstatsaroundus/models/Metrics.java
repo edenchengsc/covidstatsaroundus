@@ -9,6 +9,7 @@ public class Metrics {
     private float infectionRate;
     private float vaccinationsInitiatedRatio;
     private float vaccinationsCompletedRatio;
+    public String lastUpdatedDate;
 
     public float getTestPositivityRatio() {
         return testPositivityRatio;
