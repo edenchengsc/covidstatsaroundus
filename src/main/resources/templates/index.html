@@ -8,7 +8,6 @@
     <!-- Optional theme -->
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" />
-
 </head>
 <body>
 
@@ -16,28 +15,20 @@
     <div class="row clearfix">
         <div class="col-md-12 column">
             <h3>
-                Adams County, WA
+                <span th:text="${countyName}"></span>
             </h3>
             Updated on <span th:text="${lastUpdatedDate}"></span>
-
-            <div class="row clearfix">
-                <div class="col-md-10 column">
-                    <div class="col-md-3 column">
-                        testPositivityRatio: <span th:text="${testPositivityRatio}"></span>
-                    </div>
-                    <div class="col-md-3 column">
-                        infectionRate: <span th:text="${infectionRate}"></span>
-                    </div>
-                    <div class="col-md-3 column">
-                        vaccinationsInitiatedRatio: <span th:text="${vaccinationsInitiatedRatio}"></span>
-                    </div>
-                    <div class="col-md-3 column">
-                        vaccinationsCompletedRatio: <span th:text="${vaccinationsCompletedRatio}"></span>
-                    </div>
-                </div>
-                <div class="col-md-2 column">
-                </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-6 col-sm-3">Test Positivity Ratio: <span th:text="${testPositivityRatio}"></span></div>
+                <div class="col-6 col-sm-3">Infection Rate: <span th:text="${infectionRate}"></span></div>
+                <!-- Force next columns to break to new line -->
+                <div class="w-100"></div>
+                <div class="col-6 col-sm-3">Vaccinations Initiated Ratio: <span th:text="${vaccinationsInitiatedRatio}"></span></div>
+                <div class="col-6 col-sm-3">vaccinations Completed Ratio: <span th:text="${vaccinationsCompletedRatio}"></span></div>
             </div>
+        </div>
 <!--            <div class="row clearfix">-->
 <!--                <div id="barChartContainer" style="width: 550px; height: 400px; margin: 0 auto">  </div>-->
 <!--            </div>-->
@@ -50,7 +41,6 @@
                      style="width: 500px; height: 400px; margin: 0 auto">
                 </div>
             </div>
-
     </div>
 </div>
 
