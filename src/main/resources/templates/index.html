@@ -145,7 +145,7 @@
             crosshair: true,
             labels: {
                  style: {
-                          fontSize: '5px'
+                          fontSize: '10px'
                          }
             }
         },
@@ -159,18 +159,20 @@
                     label: {
                         connectorAllowed: false
                     },
-                    pointStart: 0
-                }
-        },
-        plotOptions: {
-            bar: {
-                dataLabels: {
-                    enabled: true
-                }
-            },
-            column: {
-                pointPadding: 0.2,
-                borderWidth: 0
+                    pointStart: 0,
+                    dataSorting: {
+                                enabled: true,
+                                sortKey: 'z'
+                     }
+                },
+                bar: {
+                    dataLabels: {
+                        enabled: true
+                    }
+                },
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
             }
         },
         credits: {

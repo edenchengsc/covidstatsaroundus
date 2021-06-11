@@ -26,6 +26,11 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.file.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -34,6 +39,8 @@ public class CovidDataService {
 
     public String FILE_DIR = "C:\\Users\\edenchengshu\\OneDrive\\Documents\\GitHub\\covidstatsaroundus\\jsonFile";
     private static String APIKEY = "e2592af2a51a42f6acedbe547a95e0da";
+    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
     private static Map<String, String> countyList = new HashMap<>();
 
     private static final Logger log = LoggerFactory.getLogger(CovidStatsAroundUsApplication.class);
@@ -99,8 +106,9 @@ public class CovidDataService {
                 County county = (County) mapper.readValue(jsonFileStream, County.class);
                 log.info(county.toString());
                 this.specifiedCounty = county;
+
                 this.specifiedCountyActualsTimeseries = Arrays.stream(county.getActualsTimeseries())
-                        .filter(a -> a.getDate().startsWith("2021-05"))
+                        .filter(a -> in30Days(a.getDate()))
                         .collect(Collectors.toList());
                 log.info("specifiedCountyActualsTimeseries : " + this.specifiedCountyActualsTimeseries.size());
             } catch (Exception e){
@@ -131,19 +139,36 @@ public class CovidDataService {
         };
     }
 
+    private boolean in30Days(String datetime) {
+
+        Date today = new Date();
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(today);
+        cal.add(Calendar.DAY_OF_MONTH, -30);
+        Date today30 = cal.getTime();
+        Date dataDate;
+
+        try {
+            dataDate = sdf.parse(datetime);
+        }catch (Exception e){
+            return false;
+        }
+
+        return today30.before(dataDate);
+    }
     /*
      Check if the .json files are local ready.
      If not or too old, download again
      */
-    public void checkJsonFiles() throws IOException
-    {
+    public void checkJsonFiles() throws IOException {
         //String sourceURL, String targetDirectory, String fileName
         for(String fileName : this.apiURL_Files.keySet()){
             File file = new File(FILE_DIR + File.separator + fileName);
             if(file.exists()){
-                long diff = new Date().getTime() - file.lastModified();
-                if (diff < 24){
-                     System.out.println("Latest version exists: " + fileName);
+                String fileDate =  sdf.format(file.lastModified());
+                String today = sdf.format(new Date().getTime());
+                if (today.equals(fileDate)){
+                     System.out.println("Latest version exists: " + fileDate);
                      continue;
                 }
             }

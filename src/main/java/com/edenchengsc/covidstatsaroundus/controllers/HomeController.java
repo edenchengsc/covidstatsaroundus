@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 public class HomeController {
@@ -47,6 +48,13 @@ public class HomeController {
 
         //line chart new cases/new death
         List<Actuals>  specifiedCountyActualsTimeseries = covidDataService.getSpecifiedCountyActualsTimeseries();
+        Collections.sort(specifiedCountyActualsTimeseries, new Comparator<Actuals>() {
+            @Override
+            public int compare(Actuals o1, Actuals o2) {
+                return  Integer.parseInt(o1.getDate().replace("-", "")) - Integer.parseInt(o2.getDate().replace("-", ""));
+            }
+        });
+
         Map<String, Integer> newCasesMap = new HashMap<>();
         Map<String, Integer> newDeathMap = new HashMap<>();
         Map<String, Integer> totalCasesMap = new HashMap<>();
