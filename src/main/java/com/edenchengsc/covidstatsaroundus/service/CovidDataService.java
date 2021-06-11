@@ -34,6 +34,7 @@ public class CovidDataService {
 
     public String FILE_DIR = "C:\\Users\\edenchengshu\\OneDrive\\Documents\\GitHub\\covidstatsaroundus\\jsonFile";
     private static String APIKEY = "e2592af2a51a42f6acedbe547a95e0da";
+    private static Map<String, String> countyList = new HashMap<>();
 
     private static final Logger log = LoggerFactory.getLogger(CovidStatsAroundUsApplication.class);
 
@@ -69,12 +70,12 @@ public class CovidDataService {
         return allStateStats;
     }
 
-
     public Map<String, String> apiURL_Files = new HashMap<>();
 
     private void setApiFiles() {
        //this.apiURL_Files.put("single_county_summary.json", "https://api.covidactnow.org/v2/county/{fips}.json?apiKey={apiKey}");
         this.apiURL_Files.put("Single_County_Timeseries.json", "https://api.covidactnow.org/v2/county/{fips}.timeseries.json?apiKey={apiKey}");
+        this.apiURL_Files.put("All_County_Summary.json", "https://api.covidactnow.org/v2/counties.json?apiKey={apiKey}");
     }
 
     private String formatURL(String url){
@@ -106,7 +107,26 @@ public class CovidDataService {
                 log.info("Exceptions here: " + e.toString());
             }
 
-            //Single County Timeseries
+            //List of County
+            countyList.put("Orange County", "CA");
+            countyList.put("King County", "WA");
+            countyList.put("New York County", "NY");
+            countyList.put("Honolulu County", "HI");
+            try {
+                ObjectMapper mapper = new ObjectMapper();
+                String fileName = FILE_DIR + File.separator + "All_County_Summary.json";
+                InputStream jsonFileStream = new FileInputStream(fileName);
+                County[] counties = (County[]) mapper.readValue(jsonFileStream, County[].class);
+                log.info(counties.toString());
+                for(County county : counties){
+                       if(countyList.keySet().contains(county.getCounty()) && county.getState().equals(countyList.get(county.getCounty()))){
+                           this.allCountyStats.add(county);
+                       }
+                }
+                log.info("allCountyStats size : " + this.allCountyStats.size());
+            } catch (Exception e){
+                log.info("Exceptions here: " + e.toString());
+            }
 
         };
     }
