@@ -3,6 +3,7 @@ package com.edenchengsc.covidstatsaroundus.controllers;
 import com.edenchengsc.covidstatsaroundus.models.Actuals;
 import com.edenchengsc.covidstatsaroundus.models.County;
 import com.edenchengsc.covidstatsaroundus.models.Metrics;
+import com.edenchengsc.covidstatsaroundus.models.State;
 import com.edenchengsc.covidstatsaroundus.service.CovidDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -75,6 +76,29 @@ public class HomeController {
         model.addAttribute("TotalDeaths", totalDeathMap.values());
 
 
+        List<State> allStateStats = covidDataService.getStateStats();
+
+        Collections.sort(allStateStats, new Comparator<State>() {
+            @Override
+            public int compare(State o1, State o2) {
+                return Math.round((o2.getMetrics().getVaccinationsCompletedRatio() - o1.getMetrics().getVaccinationsCompletedRatio()) * 100);
+            }
+        });
+
+        Map<String, Integer> vaccinationsCompletedRatioData = new LinkedHashMap<>();
+        Map<String, Integer> vaccinationsInitiatedRatioData = new LinkedHashMap<>();
+
+        for(State state : allStateStats){
+            //System.out.println("State: " + state.getState() + "  - " + Math.round(state.getMetrics().getVaccinationsCompletedRatio()*100) );
+            vaccinationsInitiatedRatioData.put(state.getState(), Math.round(state.getMetrics().getVaccinationsInitiatedRatio()*100));
+            vaccinationsCompletedRatioData.put(state.getState(), Math.round(state.getMetrics().getVaccinationsCompletedRatio()*100));
+
+        }
+
+        model.addAttribute("keySet", vaccinationsCompletedRatioData.keySet());
+        model.addAttribute("vaccinationsInitiatedRatioValues", vaccinationsInitiatedRatioData.values());
+        model.addAttribute("vaccinationsCompletedRatioValues", vaccinationsCompletedRatioData.values());
+
 
 
         return "index";
@@ -132,4 +156,6 @@ public class HomeController {
 
         return "newCaseLineChart";
     }
+
+
 }

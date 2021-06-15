@@ -1,133 +1,103 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="ISO-8859-1" />
-    <link rel="stylesheet"
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
-
+    <meta charset="ISO-8859-1"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <!-- Optional theme -->
-    <link rel="stylesheet"
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" />
-
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"/>
 </head>
 <body>
 
-<div class="container">
-    <div class="row clearfix" >
+<div class="container-md">
+    <div class="container row clearfix">
         <div class="col-md-12 column">
             <h1 class="display-1">
                 <span th:text="${countyName}"></span>
             </h1>
             Updated on <span th:text="${lastUpdatedDate}"></span>
+            <h1 class="display-1"></h1>
         </div>
-        <div class="container">
+
+        <div class="container-md">
             <div class="row">
-                <div class="col-6 col-sm-3">Test Positivity Ratio: <span th:text="${testPositivityRatio}"></span>%</div>
-                <div class="col-6 col-sm-3">Infection Rate: <span th:text="${infectionRate}"></span>%</div>
+                <div class="col-6 col-sm-6">Test Positivity Ratio: <span
+                        th:text="${testPositivityRatio}"></span>%
+                </div>
+                <div class="col-6 col-sm-6">Infection Rate: <span th:text="${infectionRate}"></span>%</div>
                 <!-- Force next columns to break to new line -->
                 <div class="w-100"></div>
             </div>
+        </div>
+        <div>
             <div class="row">
-                <div class="col-6 col-sm-3">Vaccinations Initiated Ratio: <span th:text="${vaccinationsInitiatedRatio}"></span>%</div>
-                <div class="col-6 col-sm-3">Vaccinations Completed Ratio: <span th:text="${vaccinationsCompletedRatio}"></span>%</div>
+                <div class="col-6 col-sm-6">Vaccinations Initiated Ratio: <span
+                        th:text="${vaccinationsInitiatedRatio}"></span>%
+                </div>
+                <div class="col-6 col-sm-6">Vaccinations Completed Ratio: <span
+                        th:text="${vaccinationsCompletedRatio}"></span>%
+                </div>
                 <div class="w-100"></div>
             </div>
+            <h1 class="display-1"></h1>
         </div>
-
         <div class="table-responsive">
-                <table class="table table-bordered table-hover">
-                    <thead><tr>
-                        <th>County</th>
-                        <th>State</th>
-                        <th>Population</th>
-                        <th>testPositivityRatio</th>
-                        <th>vaccinationsInitiatedRatio</th>
-                        <th>vaccinationsCompletedRatio</th>
-                    </tr></thead>
-                    <tbody>
-                    <tr th:each="countyStats : ${selectedCountyStats}">
-                        <td th:text="${countyStats.county}"></td>
-                        <td th:text="${countyStats.state}"></td>
-                        <td th:text="${countyStats.population}"></td>
-                        <td th:text="${countyStats.metrics.testPositivityRatio}"></td>
-                        <td th:text="${countyStats.metrics.vaccinationsInitiatedRatio}">0</td>
-                        <td th:text="${countyStats.metrics.vaccinationsCompletedRatio}">0</td>
-                    </tr>
-                    </tbody>
-                </table>
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>County</th>
+                    <th>State</th>
+                    <th>Population</th>
+                    <th>testPositivityRatio</th>
+                    <th>vaccinationsInitiatedRatio</th>
+                    <th>vaccinationsCompletedRatio</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="countyStats : ${selectedCountyStats}">
+                    <td th:text="${countyStats.county}"></td>
+                    <td th:text="${countyStats.state}"></td>
+                    <td th:text="${countyStats.population}"></td>
+                    <td th:text="${countyStats.metrics.testPositivityRatio}"></td>
+                    <td th:text="${countyStats.metrics.vaccinationsInitiatedRatio}">0</td>
+                    <td th:text="${countyStats.metrics.vaccinationsCompletedRatio}">0</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
+        <div class="container-lg">
+            <h3>
+                Recently 30 days:
+            </h3>
+            <div class="row clearfix">
+                <div class="col-md-3 column" id="newCaseLineChartContainer"
+                     style="width: 500px; height: 400px; margin: 0 auto">
+                </div>
+                <div class="col-md-3 column" id="newDeathLineChartContainer"
+                     style="width: 500px; height: 400px; margin: 0 auto">
+                </div>
+                <div class="col-md-3 column" id="totalCaseLineChartContainer"
+                     style="width: 500px; height: 400px; margin: 0 auto">
+                </div>
+                <div class="col-md-3 column" id="totalDeathLineChartContainer"
+                     style="width: 500px; height: 400px; margin: 0 auto">
+                </div>
+            </div>
+        </div>
+        <div class="container-md">
+            <h2 align="center">Data Graph</h2>
+            <div id="vaccineBarChartContainer"></div>
+        </div>
+    </div>
+</div>
 
-<!--            <div class="row clearfix">-->
-<!--                <div id="barChartContainer" style="width: 550px; height: 400px; margin: 0 auto">  </div>-->
-<!--            </div>-->
-    </div>
-</div>
-<div class="container">
-    <h3>
-        Recently 30 days:
-    </h3>
-    <div class="row clearfix">
-        <div class="col-md-6 column" id="newCaseLineChartContainer"
-             style="width: 500px; height: 400px; margin: 0 auto">
-        </div>
-        <div class="col-md-6 column" id="newDeathLineChartContainer"
-             style="width: 500px; height: 400px; margin: 0 auto">
-        </div>
-    </div>
-    <div class="row clearfix">
-        <div class="col-md-6 column" id="totalCaseLineChartContainer"
-             style="width: 500px; height: 400px; margin: 0 auto">
-        </div>
-        <div class="col-md-6 column" id="totalDeathLineChartContainer"
-             style="width: 500px; height: 400px; margin: 0 auto">
-        </div>
-    </div>
-    <div class="row clearfix">
-        <div class="col-md-4 column">
-            <h2>
-                Heading
-            </h2>
-            <p>
-                Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-            </p>
-            <p>
-                <a class="btn" href="#">View details »</a>
-            </p>
-        </div>
-        <div class="col-md-4 column">
-            <h2>
-                Heading
-            </h2>
-            <p>
-                Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-            </p>
-            <p>
-                <a class="btn" href="#">View details »</a>
-            </p>
-        </div>
-        <div class="col-md-4 column">
-            <h2>
-                Heading
-            </h2>
-            <p>
-                Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-            </p>
-            <p>
-                <a class="btn" href="#">View details »</a>
-            </p>
-        </div>
-    </div>
-</div>
 </body>
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <!-- Latest compiled and minified JavaScript -->
-<script
-        src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script th:inline="javascript">
-    $(function(){
+$(function(){
       Highcharts.chart('newCaseLineChartContainer', {
         title: {
             text: 'New cases'
@@ -195,8 +165,9 @@
                 }
             }]
         }
-        });
-        Highcharts.chart('newDeathLineChartContainer', {
+});
+
+Highcharts.chart('newDeathLineChartContainer', {
         title: {
             text: 'New Death '
         },
@@ -263,9 +234,9 @@
                 }
             }]
         }
-   });
+});
 
-   Highcharts.chart('totalCaseLineChartContainer', {
+Highcharts.chart('totalCaseLineChartContainer', {
         title: {
             text: 'Total cases '
         },
@@ -330,9 +301,9 @@
                 }
             }]
         }
-        });
+});
 
-        Highcharts.chart('totalDeathLineChartContainer', {
+Highcharts.chart('totalDeathLineChartContainer', {
         title: {
             text: 'Total Deaths '
         },
@@ -397,7 +368,79 @@
                 }
             }]
         }
-        });
+    });
+});
+
+$(function(){
+    Highcharts.chart('vaccineBarChartContainer', {
+        chart: {
+            type: 'bar',
+            height:1000
+        },
+        title: {
+            text: 'Vaccination'
+        },
+        subtitle: {
+            text: 'State'
+        },
+        xAxis: {
+            categories: [[${keySet}]],
+            crosshair: true,
+            labels: {
+                 style: {
+                          fontSize: '10px'
+                         }
+            }
+        },
+        yAxis: {
+            min: 0,
+            max: 100,
+            title: {
+                text: 'Percentage'
+            }
+        },
+        credits: {
+            enabled: false
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y:.1f}%</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            bar: {
+                dataLabels: {
+                    enabled: true
+                }
+            },
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'top',
+            x: -40,
+            y: 80,
+            floating: true,
+            borderWidth: 1,
+            backgroundColor:
+                Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+            shadow: true
+        },
+        series: [{
+            name: '1+ dose',
+            data: [[${vaccinationsInitiatedRatioValues}]]
+                   },{
+                        name: 'Full vaccinated',
+                        data: [[${vaccinationsCompletedRatioValues}]]
+                    }]
+      });
 });
 </script>
 
