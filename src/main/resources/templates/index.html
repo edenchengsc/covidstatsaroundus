@@ -87,8 +87,14 @@
             <h2 align="center">Data Graph</h2>
             <div id="vaccineBarChartContainer"></div>
         </div>
+        <div class="container-md">
+            <h2 align="center">Map Graph</h2>
+            <div id="mapContainer"></div>
+        </div>
     </div>
+
 </div>
+
 
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -96,9 +102,10 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
+
 <script th:inline="javascript">
-$(function(){
-      Highcharts.chart('newCaseLineChartContainer', {
+
+    $('#newCaseLineChartContainer').highcharts({
         title: {
             text: 'New cases'
         },
@@ -165,9 +172,9 @@ $(function(){
                 }
             }]
         }
-});
+    });
 
-Highcharts.chart('newDeathLineChartContainer', {
+    $('#newDeathLineChartContainer').highcharts({
         title: {
             text: 'New Death '
         },
@@ -234,9 +241,9 @@ Highcharts.chart('newDeathLineChartContainer', {
                 }
             }]
         }
-});
+    });
 
-Highcharts.chart('totalCaseLineChartContainer', {
+    $('#totalCaseLineChartContainer').highcharts({
         title: {
             text: 'Total cases '
         },
@@ -301,9 +308,9 @@ Highcharts.chart('totalCaseLineChartContainer', {
                 }
             }]
         }
-});
+    });
 
-Highcharts.chart('totalDeathLineChartContainer', {
+    $('#totalDeathLineChartContainer').highcharts({
         title: {
             text: 'Total Deaths '
         },
@@ -351,97 +358,97 @@ Highcharts.chart('totalDeathLineChartContainer', {
         credits: {
             enabled: false
         },
-        series: [{name: 'Total Deaths',
-                data: [[${TotalDeaths}]]
-                }],
+        series: [{
+                name: 'Total Deaths',
+                data: [[${TotalDeaths}]]}],
         responsive: {
-            rules: [{
-                condition: {
-                    maxWidth: 500
-                },
-                chartOptions: {
-                    legend: {
-                        layout: 'horizontal',
-                        align: 'center',
-                        verticalAlign: 'bottom'
-                    }
-                }
-            }]
-        }
+               rules: [{
+                        condition: {
+                            maxWidth: 500
+                        },
+                        chartOptions: {
+                            legend: {
+                                layout: 'horizontal',
+                                align: 'center',
+                                verticalAlign: 'bottom'
+                            }
+                        }
+                }]
+         }
     });
-});
 
-$(function(){
-    Highcharts.chart('vaccineBarChartContainer', {
-        chart: {
-            type: 'bar',
-            height:1000
-        },
-        title: {
-            text: 'Vaccination'
-        },
-        subtitle: {
-            text: 'State'
-        },
-        xAxis: {
-            categories: [[${keySet}]],
-            crosshair: true,
-            labels: {
-                 style: {
-                          fontSize: '10px'
-                         }
-            }
-        },
-        yAxis: {
-            min: 0,
-            max: 100,
+     $('#vaccineBarChartContainer').highcharts({
+            chart: {
+                type: 'bar',
+                height:1000
+            },
             title: {
-                text: 'Percentage'
-            }
-        },
-        credits: {
-            enabled: false
-        },
-        tooltip: {
-            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-            '<td style="padding:0"><b>{point.y:.1f}%</b></td></tr>',
-            footerFormat: '</table>',
-            shared: true,
-            useHTML: true
-        },
-        plotOptions: {
-            bar: {
-                dataLabels: {
-                    enabled: true
+                text: 'Vaccination'
+            },
+            subtitle: {
+                text: 'State'
+            },
+            xAxis: {
+                categories: [[${keySet}]],
+                crosshair: true,
+                labels: {
+                     style: {
+                              fontSize: '10px'
+                             }
                 }
             },
-            column: {
-                pointPadding: 0.2,
-                borderWidth: 0
-            }
-        },
-        legend: {
-            layout: 'vertical',
-            align: 'right',
-            verticalAlign: 'top',
-            x: -40,
-            y: 80,
-            floating: true,
-            borderWidth: 1,
-            backgroundColor:
-                Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
-            shadow: true
-        },
-        series: [{
-            name: '1+ dose',
-            data: [[${vaccinationsInitiatedRatioValues}]]
-                   },{
-                        name: 'Full vaccinated',
-                        data: [[${vaccinationsCompletedRatioValues}]]
-                    }]
-      });
-});
+            yAxis: {
+                min: 0,
+                max: 100,
+                title: {
+                    text: 'Percentage'
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f}%</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+
+            plotOptions: {
+                bar: {
+                    dataLabels: {
+                        enabled: true
+                    }
+                },
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'top',
+                x: -40,
+                y: 80,
+                floating: true,
+                borderWidth: 1,
+                backgroundColor:
+                    Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+                shadow: true
+            },
+            series: [{
+                name: '1+ dose',
+                data: [[${vaccinationsInitiatedRatioValues}]]
+            },{
+                name: 'Full vaccinated',
+                data: [[${vaccinationsCompletedRatioValues}]]
+            }]
+    });
+
+
 </script>
 
 </html>
