@@ -102,6 +102,12 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="http://code.highcharts.com/maps/modules/map.js"></script>
+<script src="https://code.highcharts.com/maps/modules/data.js"></script>
+<script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/maps/modules/offline-exporting.js"></script>
+<script src="https://code.highcharts.com/mapdata/countries/us/us-all.js"></script>
+
 
 <script th:inline="javascript">
 
@@ -446,6 +452,76 @@
                 name: 'Full vaccinated',
                 data: [[${vaccinationsCompletedRatioValues}]]
             }]
+    });
+
+
+    Highcharts.getJSON('https://api.covidactnow.org/v2/states.json?apiKey=e2592af2a51a42f6acedbe547a95e0da', function (mapData) {
+        // Make codes uppercase to match the map data
+        mapData.forEach(function (p) {
+            p.code = p.state;
+            p.value = p.riskLevels.overall;
+        });
+
+
+        // Instantiate the map
+        Highcharts.mapChart('mapContainer', {
+
+            chart: {
+                map: 'countries/us/us-all',
+                borderWidth: 1
+            },
+
+            title: {
+                text: 'US population density (/km²)'
+            },
+
+            exporting: {
+                sourceWidth: 600,
+                sourceHeight: 500
+            },
+
+            legend: {
+                layout: 'horizontal',
+                borderWidth: 0,
+                backgroundColor: 'rgba(255,255,255,0.85)',
+                floating: true,
+                verticalAlign: 'top',
+                y: 25
+            },
+
+            mapNavigation: {
+                enabled: true
+            },
+
+            colorAxis: {
+                min: 1,
+                type: 'logarithmic',
+                minColor: '#EEEEFF',
+                maxColor: '#000022',
+                stops: [
+                    [0, '#EFEFFF'],
+                    [0.67, '#4444FF'],
+                    [1, '#000022']
+                ]
+            },
+
+            series: [{
+                animation: {
+                    duration: 1000
+                },
+                data: mapData,
+                joinBy: ['postal-code', 'code'],
+                dataLabels: {
+                    enabled: true,
+                    color: '#FFFFFF',
+                    format: '{point.code}'
+                },
+                name: 'Population density',
+                tooltip: {
+                    pointFormat: '{point.code}: {point.value}/km²'
+                }
+            }]
+        });
     });
 
 
