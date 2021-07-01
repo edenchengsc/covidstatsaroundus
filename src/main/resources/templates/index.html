@@ -14,19 +14,39 @@
             <h1 class="display-1">
                 <span th:text="${countyName}"></span>
             </h1>
-            <h6>Updated on <span th:text="${lastUpdatedDate}"></span></h6>
+            <h6>Updated on: <span th:text="${lastUpdatedDate}"></span>            Source: covidactnow.org</h6>
+
         </div>
         <div class="container-lg clearfix">
-            <h3>Summary:</h3>
+            <h3>Summary</h3>
+            <h5></h5>
             <h5>Over the last week, King County, Washington has averaged 57 new confirmed cases per day (2.5 for
                 every 100,000 residents).</h5>
-            <h5>Risk Level: High</h5>
-            <h5>Vunabale: High</h5>
+            <h5></h5>
+        </div>
+        <div class="container-lg ">
+            <h3>
+                Recently 30 days
+            </h3>
+            <div class="row clearfix">
+                <div class="col-md-3 column" id="newCaseLineChartContainer"
+                     style="width: 290px; height: 200px; margin: 0 auto">
+                </div>
+                <div class="col-md-3 column" id="newDeathLineChartContainer"
+                     style="width: 290px; height: 200px; margin: 0 auto">
+                </div>
+                <div class="col-md-3 column" id="totalCaseLineChartContainer"
+                     style="width: 290px; height: 200px; margin: 0 auto">
+                </div>
+                <div class="col-md-3 column" id="totalDeathLineChartContainer"
+                     style="width: 290px; height: 200px; margin: 0 auto">
+                </div>
+            </div>
         </div>
         <div class="container-lg  table-responsive  clearfix">
-            <h3>Comparion among counties:</h3>
+            <h3>Comparison</h3>
             <table class="table table-bordered table-hover">
-                <thead>
+                <thead class="thead-dark">
                 <tr>
                     <th>County</th>
                     <th>State</th>
@@ -48,41 +68,22 @@
                 </tbody>
             </table>
         </div>
-        <div class="container-lg ">
-            <h3>
-                Recently 30 days:
-            </h3>
-            <div class="row clearfix">
-                <div class="col-md-6 column" id="newCaseLineChartContainer"
-                     style="width: 550px; height: 400px; margin: 0 auto">
-                </div>
-                <div class="col-md-6 column" id="newDeathLineChartContainer"
-                     style="width: 550px; height: 400px; margin: 0 auto">
-                </div>
-                <div class="col-md-6 column" id="totalCaseLineChartContainer"
-                     style="width: 550px; height: 400px; margin: 0 auto">
-                </div>
-                <div class="col-md-6 column" id="totalDeathLineChartContainer"
-                     style="width: 550px; height: 400px; margin: 0 auto">
-                </div>
-            </div>
-        </div>
         <div class="row clearfix">
-            <div class="col-md-6 column">
-                <div class="container-md">
-                    <h2 align="center">Data Graph</h2>
-                    <div id="vaccineBarChartContainer"></div>
-                </div>
-            </div>
             <div class="col-md-6 column">
                 <div class="container-md">
                     <h2 align="center">Map Graph</h2>
                     <div id="mapContainer"></div>
                 </div>
             </div>
+            <div class="col-md-6 column">
+                <div class="container-md">
+                    <h2 align="center">Data Graph</h2>
+                    <div id="vaccineBarChartContainer"></div>
+                </div>
+            </div>
+
         </div>
     </div>
-
 </div>
 
 
@@ -103,14 +104,11 @@
 
     $('#newCaseLineChartContainer').highcharts({
         title: {
-            text: 'New cases'
-        },
-        subtitle: {
-            text: 'Source: covidactnow.org'
+            text: 'New Cases'
         },
         yAxis: {
             title: {
-                text: 'Number of Cases'
+                text: ' '
             }
         },
         xAxis: {
@@ -118,7 +116,7 @@
             crosshair: true,
             labels: {
                  style: {
-                          fontSize: '10px'
+                          fontSize: '5px'
                          }
             }
         },
@@ -172,14 +170,12 @@
 
     $('#newDeathLineChartContainer').highcharts({
         title: {
-            text: 'New Death '
+            text: 'New Death'
         },
-        subtitle: {
-            text: 'Source: covidactnow.org'
-        },
+
         yAxis: {
             title: {
-                text: 'Number of Deaths'
+                text: ' '
             }
         },
         xAxis: {
@@ -219,10 +215,9 @@
             enabled: false
         },
         series: [{
-                 name: 'New Deaths',
+                 name: 'New Death',
                  data: [[${NewDeaths}]]
             }],
-
         responsive: {
             rules: [{
                 condition: {
@@ -241,14 +236,11 @@
 
     $('#totalCaseLineChartContainer').highcharts({
         title: {
-            text: 'Total cases '
-        },
-        subtitle: {
-            text: 'Source: covidactnow.org'
+            text: 'Total Cases '
         },
         yAxis: {
             title: {
-                text: 'Number of Cases'
+                text: ' '
             }
         },
         xAxis: {
@@ -310,12 +302,9 @@
         title: {
             text: 'Total Deaths '
         },
-        subtitle: {
-            text: 'Source: covidactnow.org'
-        },
         yAxis: {
             title: {
-                text: 'Number of Deaths'
+                text: ' '
             }
         },
         xAxis: {
@@ -411,7 +400,6 @@
                 shared: true,
                 useHTML: true
             },
-
             plotOptions: {
                 bar: {
                     dataLabels: {
@@ -443,7 +431,6 @@
                 data: [[${vaccinationsCompletedRatioValues}]]
             }]
     });
-
 
     Highcharts.getJSON('https://api.covidactnow.org/v2/states.json?apiKey=e2592af2a51a42f6acedbe547a95e0da', function (mapData) {
         // Make codes uppercase to match the map data
