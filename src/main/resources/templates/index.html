@@ -8,39 +8,23 @@
 </head>
 <body>
 
-<div class="container-md">
+<div class="container">
     <div class="container row clearfix">
-        <div class="col-md-12 column">
+        <div class="clearfix">
             <h1 class="display-1">
                 <span th:text="${countyName}"></span>
             </h1>
-            Updated on <span th:text="${lastUpdatedDate}"></span>
-            <h1 class="display-1"></h1>
+            <h6>Updated on <span th:text="${lastUpdatedDate}"></span></h6>
         </div>
-
-        <div class="container-md">
-            <div class="row">
-                <div class="col-6 col-sm-6">Test Positivity Ratio: <span
-                        th:text="${testPositivityRatio}"></span>%
-                </div>
-                <div class="col-6 col-sm-6">Infection Rate: <span th:text="${infectionRate}"></span>%</div>
-                <!-- Force next columns to break to new line -->
-                <div class="w-100"></div>
-            </div>
+        <div class="container-lg clearfix">
+            <h3>Summary:</h3>
+            <h5>Over the last week, King County, Washington has averaged 57 new confirmed cases per day (2.5 for
+                every 100,000 residents).</h5>
+            <h5>Risk Level: High</h5>
+            <h5>Vunabale: High</h5>
         </div>
-        <div>
-            <div class="row">
-                <div class="col-6 col-sm-6">Vaccinations Initiated Ratio: <span
-                        th:text="${vaccinationsInitiatedRatio}"></span>%
-                </div>
-                <div class="col-6 col-sm-6">Vaccinations Completed Ratio: <span
-                        th:text="${vaccinationsCompletedRatio}"></span>%
-                </div>
-                <div class="w-100"></div>
-            </div>
-            <h1 class="display-1"></h1>
-        </div>
-        <div class="table-responsive">
+        <div class="container-lg  table-responsive  clearfix">
+            <h3>Comparion among counties:</h3>
             <table class="table table-bordered table-hover">
                 <thead>
                 <tr>
@@ -64,32 +48,38 @@
                 </tbody>
             </table>
         </div>
-        <div class="container-lg">
+        <div class="container-lg ">
             <h3>
                 Recently 30 days:
             </h3>
             <div class="row clearfix">
-                <div class="col-md-3 column" id="newCaseLineChartContainer"
-                     style="width: 500px; height: 400px; margin: 0 auto">
+                <div class="col-md-6 column" id="newCaseLineChartContainer"
+                     style="width: 550px; height: 400px; margin: 0 auto">
                 </div>
-                <div class="col-md-3 column" id="newDeathLineChartContainer"
-                     style="width: 500px; height: 400px; margin: 0 auto">
+                <div class="col-md-6 column" id="newDeathLineChartContainer"
+                     style="width: 550px; height: 400px; margin: 0 auto">
                 </div>
-                <div class="col-md-3 column" id="totalCaseLineChartContainer"
-                     style="width: 500px; height: 400px; margin: 0 auto">
+                <div class="col-md-6 column" id="totalCaseLineChartContainer"
+                     style="width: 550px; height: 400px; margin: 0 auto">
                 </div>
-                <div class="col-md-3 column" id="totalDeathLineChartContainer"
-                     style="width: 500px; height: 400px; margin: 0 auto">
+                <div class="col-md-6 column" id="totalDeathLineChartContainer"
+                     style="width: 550px; height: 400px; margin: 0 auto">
                 </div>
             </div>
         </div>
-        <div class="container-md">
-            <h2 align="center">Data Graph</h2>
-            <div id="vaccineBarChartContainer"></div>
-        </div>
-        <div class="container-md">
-            <h2 align="center">Map Graph</h2>
-            <div id="mapContainer"></div>
+        <div class="row clearfix">
+            <div class="col-md-6 column">
+                <div class="container-md">
+                    <h2 align="center">Data Graph</h2>
+                    <div id="vaccineBarChartContainer"></div>
+                </div>
+            </div>
+            <div class="col-md-6 column">
+                <div class="container-md">
+                    <h2 align="center">Map Graph</h2>
+                    <div id="mapContainer"></div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -468,7 +458,7 @@
 
             chart: {
                 map: 'countries/us/us-all',
-                borderWidth: 1
+                borderWidth: 0
             },
 
             title: {
