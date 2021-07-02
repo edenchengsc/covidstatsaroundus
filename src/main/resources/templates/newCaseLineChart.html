@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="col-md-6 column">
+    <div class="col-md-3 column" id="newCaseLineChartContainer"
+         style="width: 290px; height: 200px; margin: 0 auto">
+    </div>
+</div>
+
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script>
+         $('#newCaseLineChartContainer').highcharts({
+        title: {
+            text: 'New Cases'
+        },
+        yAxis: {
+            title: {
+                text: ' '
+            }
+        },
+        xAxis: {
+            categories: [[${Dates}]],
+            crosshair: true,
+            labels: {
+                 style: {
+                          fontSize: '5px'
+                         }
+            }
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle'
+        },
+        plotOptions: {
+                series: {
+                    label: {
+                        connectorAllowed: false
+                    },
+                    pointStart: 0,
+                    dataSorting: {
+                                enabled: true,
+                                sortKey: 'z'
+                     }
+                },
+                bar: {
+                    dataLabels: {
+                        enabled: true
+                    }
+                },
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+            }
+        },
+        credits: {
+            enabled: false
+        },
+        series: [{name: 'New Cases',
+                data: [[${NewCases}]]
+                }],
+        responsive: {
+            rules: [{
+                condition: {
+                    maxWidth: 500
+                },
+                chartOptions: {
+                    legend: {
+                        layout: 'horizontal',
+                        align: 'center',
+                        verticalAlign: 'bottom'
+                    }
+                }
+            }]
+        }
+    });
+
+                </script>
+</html>
