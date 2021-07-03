@@ -79,18 +79,6 @@ public class CovidDataService {
 
     public Map<String, String> apiURL_Files = new HashMap<>();
 
-    private void setApiFiles() {
-       //this.apiURL_Files.put("single_county_summary.json", "https://api.covidactnow.org/v2/county/{fips}.json?apiKey={apiKey}");
-        this.apiURL_Files.put("Single_County_Timeseries.json", "https://api.covidactnow.org/v2/county/{fips}.timeseries.json?apiKey={apiKey}");
-        this.apiURL_Files.put("All_County_Summary.json", "https://api.covidactnow.org/v2/counties.json?apiKey={apiKey}");
-    }
-
-    private String formatURL(String url){
-        if(url.contains("{fips}")){
-            url = url.replace("{fips}", "53033"); // 53033 king county
-        }
-        return url.replace("{apiKey}", APIKEY);
-    }
 
     @Bean
     public CommandLineRunner run() throws Exception {
@@ -136,7 +124,32 @@ public class CovidDataService {
                 log.info("Exceptions here: " + e.toString());
             }
 
+            //All states stats
+            loadAllStateStats();
+
         };
+    }
+
+    private void setApiFiles() {
+        this.apiURL_Files.put("Single_County_Timeseries.json", "https://api.covidactnow.org/v2/county/{fips}.timeseries.json?apiKey={apiKey}");
+        this.apiURL_Files.put("All_County_Summary.json", "https://api.covidactnow.org/v2/counties.json?apiKey={apiKey}");
+        this.apiURL_Files.put("All_State_Summary.json", "https://api.covidactnow.org/v2/states.json?apiKey={apiKey}");
+    }
+
+    private String formatURL(String url){
+        if(url.contains("{fips}")){
+            url = url.replace("{fips}", "53033"); // 53033 king county
+        }
+        return url.replace("{apiKey}", APIKEY);
+    }
+
+    private void loadAllStateStats() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        String fileName = FILE_DIR + File.separator + "All_State_Summary.json";
+        InputStream jsonFileStream = new FileInputStream(fileName);
+        State[] states = (State[]) mapper.readValue(jsonFileStream, State[].class);
+        log.info(states.toString());
+        this.allStateStats = Arrays.asList(states);
     }
 
     private boolean in30Days(String datetime) {
@@ -144,7 +157,7 @@ public class CovidDataService {
         Date today = new Date();
         Calendar cal = new GregorianCalendar();
         cal.setTime(today);
-        cal.add(Calendar.DAY_OF_MONTH, -30);
+        cal.add(Calendar.DAY_OF_MONTH, -31);
         Date today30 = cal.getTime();
         Date dataDate;
 
