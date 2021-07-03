@@ -9,83 +9,94 @@
 <body>
 
 <div class="container">
-    <div class="container row clearfix">
-        <div class="clearfix">
-            <h1 class="display-1">
-                <span th:text="${countyName}"></span>
-            </h1>
-            <h6>Updated on: <span th:text="${lastUpdatedDate}"></span>            Source: covidactnow.org</h6>
-
+    <div class="clearfix">
+        <div class="col-md-4 column">
         </div>
-        <div class="container-lg clearfix">
-            <h3>Summary</h3>
-            <h5></h5>
-            <h5>Over the last week, King County, Washington has averaged 57 new confirmed cases per day (2.5 for
-                every 100,000 residents).</h5>
-            <h5></h5>
+        <div class="col-md-4 column">
+            <form class="navbar-form navbar-left" role="search" th:action="@{/searchCounty}" method="post">
+                <div class="form-group">
+                    <input type="text" name = "fips" class="form-control" style="background-color:#edebf0"/>
+                </div>
+                <button type="submit" class="btn btn-default"  >Search</button>
+            </form>
         </div>
-        <div class="container-lg ">
-            <h3>
-                Recently 30 days
-            </h3>
-            <div class="row clearfix">
-                <div class="col-md-3 column" id="newCaseLineChartContainer"
-                     style="width: 290px; height: 200px; margin: 0 auto">
-                </div>
-                <div class="col-md-3 column" id="newDeathLineChartContainer"
-                     style="width: 290px; height: 200px; margin: 0 auto">
-                </div>
-                <div class="col-md-3 column" id="totalCaseLineChartContainer"
-                     style="width: 290px; height: 200px; margin: 0 auto">
-                </div>
-                <div class="col-md-3 column" id="totalDeathLineChartContainer"
-                     style="width: 290px; height: 200px; margin: 0 auto">
-                </div>
-            </div>
-        </div>
-        <div class="container-lg  table-responsive  clearfix">
-            <h3>Comparison</h3>
-            <table class="table table-bordered table-hover">
-                <thead class="thead-dark">
-                <tr>
-                    <th>County</th>
-                    <th>State</th>
-                    <th>Population</th>
-                    <th>testPositivityRatio</th>
-                    <th>vaccinationsInitiatedRatio</th>
-                    <th>vaccinationsCompletedRatio</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="countyStats : ${selectedCountyStats}">
-                    <td th:text="${countyStats.county}"></td>
-                    <td th:text="${countyStats.state}"></td>
-                    <td th:text="${countyStats.population}"></td>
-                    <td th:text="${countyStats.metrics.testPositivityRatio}"></td>
-                    <td th:text="${countyStats.metrics.vaccinationsInitiatedRatio}">0</td>
-                    <td th:text="${countyStats.metrics.vaccinationsCompletedRatio}">0</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="row clearfix">
-            <div class="col-md-6 column">
-                <div class="container-md">
-                    <h2 align="center">Map Graph</h2>
-                    <div id="mapContainer"></div>
-                </div>
-            </div>
-            <div class="col-md-6 column">
-                <div class="container-md">
-                    <h2 align="center">Data Graph</h2>
-                    <div id="vaccineBarChartContainer"></div>
-                </div>
-            </div>
-
+        <div class="col-md-4 column">
         </div>
     </div>
-</div>
+    <div class="clearfix">
+        <h1 class="display-1">
+            <span th:text="${countyName}"></span>,  <span th:text="${stateName}"></span>
+        </h1>
+        <h6>Updated on: <span  th:text="${lastUpdatedDate}"></span>            Source: covidactnow.org</h6>
+    </div>
+    <div class="container-lg clearfix">
+        <h3>Summary</h3>
+        <h5></h5>
+        <h5>Over the last week, King County, Washington has averaged 57 new confirmed cases per day (2.5 for every 100,000 residents) and averaged 1.9 daily deaths.
+        </h5>
+        <h5>1,503,418 people (66.7%) have received at least one dose and 1,378,892 (61.2%) are fully vaccinated.
+        </h5>
+    </div>
+    <div class="container-lg">
+        <h3>
+            Recently 30 days
+        </h3>
+        <div class="row clearfix">
+            <div class="col-md-3 column" id="newCaseLineChartContainer"
+                 style="width: 290px; height: 200px; margin: 0 auto">
+            </div>
+            <div class="col-md-3 column" id="newDeathLineChartContainer"
+                 style="width: 290px; height: 200px; margin: 0 auto">
+            </div>
+            <div class="col-md-3 column" id="totalCaseLineChartContainer"
+                 style="width: 290px; height: 200px; margin: 0 auto">
+            </div>
+            <div class="col-md-3 column" id="totalDeathLineChartContainer"
+                 style="width: 290px; height: 200px; margin: 0 auto">
+            </div>
+        </div>
+    </div>
+    <div class="container-lg  table-responsive  clearfix">
+        <h3>Comparison with</h3>
+        <table class="table table-bordered table-hover">
+            <thead class="thead-dark">
+            <tr>
+                <th>County</th>
+                <th>State</th>
+                <th>Population</th>
+                <th>testPositivityRatio</th>
+                <th>vaccinationsInitiatedRatio</th>
+                <th>vaccinationsCompletedRatio</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="countyStats : ${selectedCountyStats}">
+                <td th:text="${countyStats.county}"></td>
+                <td th:text="${countyStats.state}"></td>
+                <td th:text="${countyStats.population}"></td>
+                <td th:text="${countyStats.metrics.testPositivityRatio}"></td>
+                <td th:text="${countyStats.metrics.vaccinationsInitiatedRatio}">0</td>
+                <td th:text="${countyStats.metrics.vaccinationsCompletedRatio}">0</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="row clearfix">
+        <div class="col-md-6 column">
+            <div class="container-md">
+                <h2 align="center">Map Graph</h2>
+                <div id="mapContainer"></div>
+            </div>
+        </div>
+        <div class="col-md-6 column">
+            <div class="container-md">
+                <h2 align="center">Data Graph</h2>
+                <div id="vaccineBarChartContainer"></div>
+            </div>
+        </div>
 
+    </div>
+</div>
 
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -101,6 +112,10 @@
 
 
 <script th:inline="javascript">
+
+     Highcharts.setOptions({
+            colors: ['#4572A7', '#a4deba', '#50B432', '#ED561B', '#DDDF00',  '#64E572', '#FF9655', '#FFF263', '#6AF9C4']
+        });
 
     $('#newCaseLineChartContainer').highcharts({
         title: {
@@ -361,6 +376,8 @@
                 }]
          }
     });
+
+
 
      $('#vaccineBarChartContainer').highcharts({
             chart: {
