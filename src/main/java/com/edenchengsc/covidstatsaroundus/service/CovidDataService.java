@@ -3,48 +3,34 @@ package com.edenchengsc.covidstatsaroundus.service;
 import com.edenchengsc.covidstatsaroundus.CovidStatsAroundUsApplication;
 import com.edenchengsc.covidstatsaroundus.models.Actuals;
 import com.edenchengsc.covidstatsaroundus.models.County;
-import com.edenchengsc.covidstatsaroundus.models.Metrics;
 import com.edenchengsc.covidstatsaroundus.models.State;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVPrinter;
-import org.apache.commons.csv.CSVRecord;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.nio.file.*;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class CovidDataService {
 
-    public String FILE_DIR = "C:\\Users\\edenchengshu\\OneDrive\\Documents\\GitHub\\covidstatsaroundus\\jsonFile";
-    private static String APIKEY = "e2592af2a51a42f6acedbe547a95e0da";
-    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-    private static Map<String, String> countyList = new HashMap<>();
 
     private static final Logger log = LoggerFactory.getLogger(CovidStatsAroundUsApplication.class);
 
+    private static String FILE_DIR = "./jsonFile";
+    private static String APIKEY = "e2592af2a51a42f6acedbe547a95e0da";
+    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+
+    private static Map<String, String> countyList = new HashMap<>();
     private List<County> allCountyStats = new ArrayList<>();
 
     public County getSpecifiedCounty() {
@@ -104,8 +90,8 @@ public class CovidDataService {
             }
 
             //List of County
-            countyList.put("Orange County", "CA");
             countyList.put("King County", "WA");
+            countyList.put("Orange County", "CA");
             countyList.put("New York County", "NY");
             countyList.put("Honolulu County", "HI");
             try {
@@ -126,7 +112,6 @@ public class CovidDataService {
 
             //All states stats
             loadAllStateStats();
-
         };
     }
 
@@ -153,7 +138,6 @@ public class CovidDataService {
     }
 
     private boolean in30Days(String datetime) {
-
         Date today = new Date();
         Calendar cal = new GregorianCalendar();
         cal.setTime(today);
@@ -174,6 +158,13 @@ public class CovidDataService {
      If not or too old, download again
      */
     public void checkJsonFiles() throws IOException {
+        String dirPath = new File("").getAbsolutePath() + File.separator + "jsonFile";
+        File dir = new File(dirPath);
+        if(!dir.exists()){
+            dir.mkdir();
+            System.out.println("Create dir:" + dirPath);
+        }
+
         //String sourceURL, String targetDirectory, String fileName
         for(String fileName : this.apiURL_Files.keySet()){
             File file = new File(FILE_DIR + File.separator + fileName);

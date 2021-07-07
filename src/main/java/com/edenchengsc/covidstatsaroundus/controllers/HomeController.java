@@ -2,7 +2,6 @@ package com.edenchengsc.covidstatsaroundus.controllers;
 
 import com.edenchengsc.covidstatsaroundus.models.Actuals;
 import com.edenchengsc.covidstatsaroundus.models.County;
-import com.edenchengsc.covidstatsaroundus.models.Metrics;
 import com.edenchengsc.covidstatsaroundus.models.State;
 import com.edenchengsc.covidstatsaroundus.service.CovidDataService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Controller
 public class HomeController {
@@ -37,8 +33,6 @@ public class HomeController {
         model.addAttribute ("lastUpdatedDate", specifiedCounty.getLastUpdatedDate());
 
 
-
-
         //Comparation table
         List<County> allCountyStats = covidDataService.getCounties();
         Map<String, Integer> data = new LinkedHashMap<>();
@@ -57,6 +51,10 @@ public class HomeController {
             }
         });
 
+
+        int newConfirmedCases7DaysSum = 0;
+        int dailyDeath7DaysSum = 0;
+
         String[] dataArr = new String[30];
         int[] newCasesNumArr = new int[30];
         int[] newDeathNumArr = new int[30];
@@ -73,7 +71,21 @@ public class HomeController {
             totalDeathNumArr[i] = actuals.getDeaths();
             //System.out.println( "i = " + i + "  ->"+dataArr[i]  + ": " + newDeathNumArr[i]);
             i++;
+            if(i >= 30){
+                break;
+            }
+            if(i >= 23){
+                System.out.println("New Cases :" + actuals.getNewCases() + "  New Death: " +actuals.getNewDeaths() );
+                newConfirmedCases7DaysSum += actuals.getNewCases();
+                dailyDeath7DaysSum += actuals.getNewDeaths();
+            }
         }
+
+        model.addAttribute ("newConfirmedCasesPerDay", newConfirmedCases7DaysSum/7);
+        model.addAttribute ("aveDailyDeath", dailyDeath7DaysSum/7);
+        model.addAttribute ("oneDoseVaccinatedRatio", specifiedCounty.getMetrics().getVaccinationsInitiatedRatio()*100 + "%");
+        model.addAttribute ("fullVaccinatedRatio", specifiedCounty.getMetrics().getVaccinationsCompletedRatio()*100+ "%");
+
 
         model.addAttribute("Dates", dataArr);
         model.addAttribute("NewCases", newCasesNumArr);
@@ -101,6 +113,7 @@ public class HomeController {
             initRatioPercentage[j] = Math.round(state.getMetrics().getVaccinationsInitiatedRatio()*100);
             fullRatioPercentage[j] = Math.round(state.getMetrics().getVaccinationsCompletedRatio()*100);
             j++;
+
             //System.out.println("State: " + state.getState() + "  - " + Math.round(state.getMetrics().getVaccinationsCompletedRatio()*100) );
         }
 
@@ -136,14 +149,6 @@ public class HomeController {
             totalCasesMap.put(actuals.getDate(), actuals.getCases());
             totalDeathMap.put(actuals.getDate(), actuals.getDeaths());
         }
-//
-//        String[] dateArr = new String[30];
-//        int[] newCases = new int[30];
-//        for(int i = 0; i < 30; i++){
-//            dateArr[i] = newCasesMap.get()
-//
-//        }
-
 
         model.addAttribute("Dates", newCasesMap.keySet());
         model.addAttribute("NewCases", newCasesMap.values());
