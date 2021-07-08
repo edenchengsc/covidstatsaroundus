@@ -35,10 +35,11 @@ public class HomeController {
 
         //Comparation table
         List<County> allCountyStats = covidDataService.getCounties();
-        Map<String, Integer> data = new LinkedHashMap<>();
-        for(County county : allCountyStats){
-            data.put(county.getCounty().replace(" County", ""), Math.round(county.getMetrics().getVaccinationsCompletedRatio()*100));
-        }
+//        Map<String, Integer> data = new LinkedHashMap<>();
+//        for(County county : allCountyStats){
+//            int roundOff = (int) Math.round(county.getMetrics().getVaccinationsCompletedRatio() * 10000) / 100;
+//            data.put(county.getCounty().replace(" County", ""), roundOff);
+//        }
         model.addAttribute("selectedCountyStats", allCountyStats);
 
 
@@ -83,15 +84,15 @@ public class HomeController {
 
         model.addAttribute ("newConfirmedCasesPerDay", newConfirmedCases7DaysSum/7);
         model.addAttribute ("aveDailyDeath", dailyDeath7DaysSum/7);
-        model.addAttribute ("oneDoseVaccinatedRatio", specifiedCounty.getMetrics().getVaccinationsInitiatedRatio()*100 + "%");
-        model.addAttribute ("fullVaccinatedRatio", specifiedCounty.getMetrics().getVaccinationsCompletedRatio()*100+ "%");
+        model.addAttribute ("oneDoseVaccinatedRatio", specifiedCounty.getMetrics().getVaccinationsInitiatedRatio()*10000/100 + "%");
+        model.addAttribute ("fullVaccinatedRatio", specifiedCounty.getMetrics().getVaccinationsCompletedRatio()*10000/100+ "%");
 
 
         model.addAttribute("Dates", dataArr);
         model.addAttribute("NewCases", newCasesNumArr);
         model.addAttribute("NewDeaths", newDeathNumArr);
         model.addAttribute("TotalCases", totalCasesNumArr);
-        model.addAttribute("TotalDeaths", totalCasesNumArr);
+        model.addAttribute("TotalDeaths", totalDeathNumArr);
 
 
         //Vaccine Bar Chart
@@ -110,8 +111,8 @@ public class HomeController {
         int j = 0;
         for(State state : allStateStats){
             stateArr[j] = state.getState();
-            initRatioPercentage[j] = Math.round(state.getMetrics().getVaccinationsInitiatedRatio()*100);
-            fullRatioPercentage[j] = Math.round(state.getMetrics().getVaccinationsCompletedRatio()*100);
+            initRatioPercentage[j] = Math.round(state.getMetrics().getVaccinationsInitiatedRatio()*10000/100);
+            fullRatioPercentage[j] = Math.round(state.getMetrics().getVaccinationsCompletedRatio()*10000/100);
             j++;
 
             //System.out.println("State: " + state.getState() + "  - " + Math.round(state.getMetrics().getVaccinationsCompletedRatio()*100) );
