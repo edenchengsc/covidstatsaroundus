@@ -82,7 +82,7 @@
         </table>
     </div>
     <div class="row clearfix">
-        <h2 align="left">Vaccination Summary</h2>
+        <h2 align="left">In the US</h2>
         <div class="col-md-6 column">
             <div class="container-md">
                 <div id="mapContainer"></div>
@@ -118,7 +118,7 @@
 
     $('#newCaseLineChartContainer').highcharts({
         title: {
-            text: 'New Cases'
+            text: ''
         },
         yAxis: {
             title: {
@@ -184,7 +184,7 @@
 
     $('#newDeathLineChartContainer').highcharts({
         title: {
-            text: 'New Death'
+            text: ''
         },
 
         yAxis: {
@@ -250,7 +250,7 @@
 
     $('#totalCaseLineChartContainer').highcharts({
         title: {
-            text: 'Total Cases '
+            text: ''
         },
         yAxis: {
             title: {
@@ -314,7 +314,7 @@
 
     $('#totalDeathLineChartContainer').highcharts({
         title: {
-            text: 'Total Deaths '
+            text: ''
         },
         yAxis: {
             title: {
@@ -384,10 +384,10 @@
                 height:1000
             },
             title: {
-                text: 'Vaccination'
+                text: 'Vaccinations'
             },
             subtitle: {
-                text: 'State'
+                text: ''
             },
             xAxis: {
                 categories: [[${keySet}]],
@@ -402,7 +402,7 @@
                 min: 0,
                 max: 100,
                 title: {
-                    text: 'Percentage'
+                    text: ''
                 }
             },
             credits: {
@@ -419,7 +419,7 @@
             plotOptions: {
                 bar: {
                     dataLabels: {
-                        enabled: true
+                        enabled: false
                     }
                 },
                 column: {
@@ -440,11 +440,12 @@
                 shadow: true
             },
             series: [{
+                name: 'Fully vaccinated',
+                data: [[${vaccinationsCompletedRatioValues}]]
+            },
+            {
                 name: '1+ dose',
                 data: [[${vaccinationsInitiatedRatioValues}]]
-            },{
-                name: 'Full vaccinated',
-                data: [[${vaccinationsCompletedRatioValues}]]
             }]
     });
 
@@ -453,7 +454,7 @@
     // Make codes uppercase to match the map data
     data.forEach(function (p) {
             p.code = p.state;
-            p.value = p.metrics.vaccinationsCompletedRatio*10000/100;
+            p.value = p.riskLevels.overall;
         });
 
 
@@ -469,8 +470,11 @@
         },
 
         title: {
-            text: '% Full Vaccinated'
+            text: 'Risk Levels'
         },
+        subtitle: {
+        text: ''
+         },
 
         exporting: {
             sourceWidth: 600,
@@ -478,6 +482,9 @@
         },
 
         legend: {
+            title: {
+                    text: 'Low risk     --------->        Severe risk'
+            },
             layout: 'horizontal',
             borderWidth: 0,
             backgroundColor: 'rgba(255,255,255,0.85)',
@@ -490,17 +497,19 @@
             enabled: true
         },
 
-        colorAxis: {
-            min: 1,
-            type: 'logarithmic',
-            minColor: '#EEEEFF',
-            maxColor: '#000022',
-            stops: [
-                [0, '#EFEFFF'],
-                [0.67, '#4444FF'],
-                [1, '#000022']
-            ]
-        },
+         colorAxis: {
+                    min: 0,
+                    max: 5,
+                    tickInterval: 1,
+                    stops: [
+                            [0, '#F1EEF6'],
+                            [0.67, '#900037'],
+                            [1, '#500007']
+                         ],
+                    labels: {
+                        format: '{value}'
+                    }
+                },
 
         series: [{
             animation: {
@@ -515,11 +524,12 @@
             },
             name: '% Full Vaccinated',
             tooltip: {
-                pointFormat: '{point.code}: {point.value}%'
+                pointFormat: '{point.code}: {point.value}'
             }
         }]
     });
 });
+
 
 
 
