@@ -26,20 +26,25 @@
         </div>
     </div>
     <div style="background-color: #ffffff">
-        <div class="clearfix">
-            <h1 class="display-1">
-                <span th:text="${countyName}"></span>,  <span th:text="${stateName}"></span>
-            </h1>
-            <h6 align="left">Updated on: <span  class="badge badge-light"  th:text="${lastUpdatedDate}"></span>
-            </h6>
-        </div>
-        <div class="container-lg clearfix" style="background-color: #ffffff">
-            <h5></h5>
-            <h5>Over the last week, averaged <span class="badge badge-pill badge-info" th:text="${newConfirmedCasesPerDay}"></span> new confirmed cases per day and averaged <span class="badge badge-pill badge-info" th:text="${aveDailyDeath}"></span> daily deaths.
-            </h5>
-            <h5> <span class="badge badge-pill badge-info" th:text="${oneDoseVaccinatedRatio}"></span> people have received at least one dose and  <span class="badge badge-pill badge-info" th:text="${fullVaccinatedRatio}"></span> people are fully vaccinated.
-            </h5>
-        </div>
+        <div class="container-lg" >
+                <h1 class="display-1">
+                    <span th:text="${countyName}"></span>,  <span th:text="${stateName}"></span>
+                </h1>
+                <h6 align="left">Updated on: <span  class="badge badge-light"  th:text="${lastUpdatedDate}"></span>
+                </h6>
+            <div class="col-md-6 align-self-center">
+                <h4>Over the last week, averaged <span class="badge badge-pill badge-info" th:text="${newConfirmedCasesPerDay}"></span> new confirmed cases per day,</h4>
+                <h4>and averaged <span class="badge badge-pill badge-info" th:text="${aveDailyDeath}"></span> daily deaths.
+                </h4>
+                <h4> <span class="badge badge-pill badge-info" th:text="${oneDoseVaccinatedRatio}"></span> people have received at least one dose </h4>
+                <h4>and  <span class="badge badge-pill badge-info" th:text="${fullVaccinatedRatio}"></span> people are fully vaccinated. </h4>
+            </div>
+            <div class="col-md-6 column">
+                <div id="WAContainer" style="height: 250px; width: 500px; margin: 0 auto; text-align:center; line-height: 520px">
+                    Downloading map...
+                </div>
+            </div>
+        <div>
         <div class="container-lg" >
             <h3>
                 Recently 30 days
@@ -108,13 +113,132 @@
 <script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/maps/modules/offline-exporting.js"></script>
 <script src="https://code.highcharts.com/mapdata/countries/us/us-all.js"></script>
-
+<script src="https://code.highcharts.com/mapdata/countries/us/us-wa-all.js"></script>
 
 <script th:inline="javascript">
 
      Highcharts.setOptions({
             colors: ['#4572A7', '#99bde8', '#50B432', '#ED561B', '#DDDF00',  '#64E572', '#FF9655', '#FFF263', '#6AF9C4']
         });
+
+       var mapName = 'countries/us/us-wa-all'
+
+Highcharts.getJSON(
+    'https://api.covidactnow.org/v2/county/WA.json?apiKey=e2592af2a51a42f6acedbe547a95e0da',
+    function (data) {
+        var countiesMap = Highcharts.geojson(
+                Highcharts.maps[mapName]
+            ),
+            // Extract the line paths from the GeoJSON
+            lines = Highcharts.geojson(
+                Highcharts.maps[mapName], 'mapline'
+            ),
+            // Filter out the state borders and separator lines, we want these
+            // in separate series
+            borderLines = lines.filter(
+                l => l.properties['hc-group'] === '__border_lines__'
+            ),
+            separatorLines = lines.filter(
+                l => l.properties['hc-group'] === '__separator_lines__'
+            );
+
+        // Add state acronym for tooltip
+        countiesMap.forEach(function (mapPoint) {
+            mapPoint.name = mapPoint.name + ', ' +
+                mapPoint.properties['hc-key'].substr(3, 2);
+        });
+
+       // Make codes uppercase to match the map data
+       data.forEach(function (p) {
+            p.code = p.fips;
+            p.value = Math.round(p.metrics.vaccinationsInitiatedRatio * 10000)/100;
+        });
+
+        document.getElementById('WAContainer').innerHTML = 'Rendering map...';
+
+        // Create the map
+        setTimeout(function () { // Otherwise innerHTML doesn't update
+            Highcharts.mapChart('WAContainer', {
+                chart: {
+                    borderWidth: 0,
+                    marginRight: 5 // for the legend
+                },
+
+                title: {
+                    text: '% 1+ Dose Vaccinated in WA'
+                },
+
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    floating: true,
+                    width:'20%',
+                    backgroundColor: ( // theme
+                        Highcharts.defaultOptions &&
+                        Highcharts.defaultOptions.legend &&
+                        Highcharts.defaultOptions.legend.backgroundColor
+                    ) || 'rgba(255, 255, 255, 0.85)'
+                },
+
+<!--                mapNavigation: {-->
+<!--                    enabled: true-->
+<!--                },-->
+
+                colorAxis: {
+                    min: 0,
+                    max: 100,
+                    tickInterval: 50,
+                    stops: [
+                        [0, '#F1EEF6'],
+                        [0.65, '#99bde8'],
+                        [1, '#4572A7']
+                    ],
+                    labels: {
+                        format: '{value}%'
+                    }
+                },
+
+                plotOptions: {
+                    mapline: {
+                        showInLegend: false,
+                        enableMouseTracking: false
+                    }
+                },
+                credits: {
+           				 enabled: false
+        				},
+
+                series: [{
+                    mapData: countiesMap,
+                    data: data,
+                    joinBy: ['fips', 'fips'],
+                    name: '% Vaccinated',
+                    tooltip: {
+                        valueSuffix: '%'
+                    },
+                    borderWidth: 0.5,
+                    states: {
+                        hover: {
+                            color: '#a4edba'
+                        }
+                    },
+                    shadow: false
+                }, {
+                    type: 'mapline',
+                    name: 'State borders',
+                    data: borderLines,
+                    color: 'white',
+                    shadow: false
+                }, {
+                    type: 'mapline',
+                    name: 'Separator',
+                    data: separatorLines,
+                    color: 'gray',
+                    shadow: false
+                }]
+            });
+        }, 0);
+    });
 
     $('#newCaseLineChartContainer').highcharts({
         title: {
