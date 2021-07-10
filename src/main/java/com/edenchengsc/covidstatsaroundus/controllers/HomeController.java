@@ -85,7 +85,6 @@ public class HomeController {
             }
         }
 
-        //model.addAttribute ("newConfirmedCasesPerDay", df2.format(specifiedCounty.getPopulation()/100000 * specifiedCounty.getMetrics().getCaseDensity()));
         model.addAttribute ("newConfirmedCasesPerDay", df2.format(newConfirmedCases7DaysSum/7));
         model.addAttribute ("aveDailyDeath", df2.format(dailyDeath7DaysSum/7));
         model.addAttribute ("oneDoseVaccinatedRatio", specifiedCounty.getMetrics().getVaccinationsInitiatedRatio()*10000/100 + "%");
