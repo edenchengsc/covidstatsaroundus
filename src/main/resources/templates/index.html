@@ -27,13 +27,15 @@
     </div>
     <div style="background-color: #ffffff">
         <div class="container-lg" >
-                <h1 class="display-1">
-                    <span th:text="${countyName}"></span>,  <span th:text="${stateName}"></span>
-                </h1>
+
                 <h6 align="left">Updated on: <span  class="badge badge-light"  th:text="${lastUpdatedDate}"></span>
                 </h6>
             <div align="center"  class="col-md-6">
-                <h4>Over the last week, averaged <span class="badge badge-pill badge-info" th:text="${newConfirmedCasesPerDay}"></span> new confirmed cases per day,</h4>
+                <h4>Over the last week,</h4>
+                    <h1 class="display-1">
+                        <mark><span th:text="${countyName}"></span>,  <span th:text="${stateName}"></span></mark>
+                </h1>
+                <h4>has averaged <span class="badge badge-pill badge-info" th:text="${newConfirmedCasesPerDay}"></span> new confirmed cases per day,</h4>
                 <h4>and averaged <span class="badge badge-pill badge-info" th:text="${aveDailyDeath}"></span> daily deaths.
                 </h4>
                 <h4> <span class="badge badge-pill badge-info" th:text="${oneDoseVaccinatedRatio}"></span> people have received at least one dose,</h4>
@@ -70,7 +72,10 @@
         <table class="table table-bordered table-hover">
             <thead class="thead-dark">
             <tr>
-                <th style="color:#4572A7;">County(Population)</th>
+                <th style="color:#4572A7;">County (Population)</th>
+                <th style="color:#4572A7;">Daily New Cases Per 100K</th>
+                <th style="color:#4572A7;">Infection Rate</th>
+                <th style="color:#4572A7;">Positive Test Rate</th>
                 <th style="color:#4572A7;">Risk Level</th>
                 <th style="color:#4572A7;">1+ Dose</th>
                 <th style="color:#4572A7;">Fully Vaccinated</th>
@@ -79,9 +84,12 @@
             <tbody>
             <tr th:each="countyStats : ${selectedCountyStats}">
                 <td th:text="${countyStats.county} +', ' +  ${countyStats.state} + '  ('+ ${countyStats.population}+  ')'"></td>
-                <td th:text="${countyStats.metrics.testPositivityRatio}"></td>
-                <td th:text="${countyStats.metrics.vaccinationsInitiatedRatio*10000/100} + '%'"></td>
-                <td th:text="${countyStats.metrics.vaccinationsCompletedRatio*10000/100} + '%'"></td>
+                <td th:text="${countyStats.metrics.caseDensity}"></td>
+                <td th:text="${countyStats.metrics.infectionRate}"></td>
+                <td th:text="${#numbers.formatDecimal(countyStats.metrics.testPositivityRatio*100,1,'COMMA',1,'POINT')} +'%'"></td>
+                <td th:text="${countyStats.riskLevels.overall}"></td>
+                <td th:text="${#numbers.formatDecimal(countyStats.metrics.vaccinationsInitiatedRatio*100,1,'COMMA',1,'POINT')} + '%'"></td>
+                <td th:text="${#numbers.formatDecimal(countyStats.metrics.vaccinationsCompletedRatio*100,1,'COMMA',1,'POINT')} + '%'"></td>
             </tr>
             </tbody>
         </table>

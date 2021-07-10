@@ -11,10 +11,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.text.DecimalFormat;
 import java.util.*;
 
 @Controller
 public class HomeController {
+
+    private static DecimalFormat df2 = new DecimalFormat("#.#");
 
     @Autowired
     CovidDataService covidDataService;
@@ -53,8 +56,8 @@ public class HomeController {
         });
 
 
-        int newConfirmedCases7DaysSum = 0;
-        int dailyDeath7DaysSum = 0;
+        double newConfirmedCases7DaysSum = 0;
+        double dailyDeath7DaysSum = 0;
 
         String[] dataArr = new String[30];
         int[] newCasesNumArr = new int[30];
@@ -76,14 +79,15 @@ public class HomeController {
                 break;
             }
             if(i >= 23){
-                System.out.println("New Cases :" + actuals.getNewCases() + "  New Death: " +actuals.getNewDeaths() );
+                //System.out.println("New Cases :" + actuals.getNewCases() + "  New Death: " +actuals.getNewDeaths() );
                 newConfirmedCases7DaysSum += actuals.getNewCases();
                 dailyDeath7DaysSum += actuals.getNewDeaths();
             }
         }
 
-        model.addAttribute ("newConfirmedCasesPerDay", newConfirmedCases7DaysSum/7);
-        model.addAttribute ("aveDailyDeath", dailyDeath7DaysSum/7);
+        //model.addAttribute ("newConfirmedCasesPerDay", df2.format(specifiedCounty.getPopulation()/100000 * specifiedCounty.getMetrics().getCaseDensity()));
+        model.addAttribute ("newConfirmedCasesPerDay", df2.format(newConfirmedCases7DaysSum/7));
+        model.addAttribute ("aveDailyDeath", df2.format(dailyDeath7DaysSum/7));
         model.addAttribute ("oneDoseVaccinatedRatio", specifiedCounty.getMetrics().getVaccinationsInitiatedRatio()*10000/100 + "%");
         model.addAttribute ("fullVaccinatedRatio", specifiedCounty.getMetrics().getVaccinationsCompletedRatio()*10000/100+ "%");
 
@@ -144,7 +148,7 @@ public class HomeController {
         Map<String, Integer> totalDeathMap = new HashMap<>();
 
         for(Actuals actuals : specifiedCountyActualsTimeseries){
-            System.out.println(actuals.getDate() + ": " + actuals.getNewCases());
+            //System.out.println(actuals.getDate() + ": " + actuals.getNewCases());
             newCasesMap.put(actuals.getDate(), actuals.getNewCases());
             newDeathMap.put(actuals.getDate(), actuals.getNewDeaths());
             totalCasesMap.put(actuals.getDate(), actuals.getCases());
