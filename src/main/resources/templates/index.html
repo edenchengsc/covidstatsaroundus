@@ -72,22 +72,23 @@
         <table class="table table-bordered table-hover">
             <thead class="thead-dark">
             <tr>
-                <th style="color:#4572A7;">County (Population)</th>
-                <th style="color:#4572A7;">Daily New Cases Per 100K</th>
-                <th style="color:#4572A7;">Infection Rate</th>
-                <th style="color:#4572A7;">Positive Test Rate</th>
-                <th style="color:#4572A7;">Risk Level</th>
-                <th style="color:#4572A7;">1+ Dose</th>
-                <th style="color:#4572A7;">Fully Vaccinated</th>
+                <th style="color:#4572A7;text-align:center">County (Population)</th>
+                <th style="color:#4572A7;text-align:center">Daily New Cases Per 100K</th>
+                <th style="color:#4572A7;text-align:center">Infection Rate</th>
+                <th style="color:#4572A7;text-align:center">Risk Level</th>
+                <th style="color:#4572A7;text-align:center">Positive Test Rate</th>
+
+                <th style="color:#4572A7;text-align:center">1+ Dose</th>
+                <th style="color:#4572A7;text-align:center">Fully Vaccinated</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="countyStats : ${selectedCountyStats}">
+            <tr th:each="countyStats : ${selectedCountyStats}" style="text-align:center">
                 <td th:text="${countyStats.county} +', ' +  ${countyStats.state} + '  ('+ ${countyStats.population}+  ')'"></td>
                 <td th:text="${countyStats.metrics.caseDensity}"></td>
                 <td th:text="${countyStats.metrics.infectionRate}"></td>
-                <td th:text="${#numbers.formatDecimal(countyStats.metrics.testPositivityRatio*100,1,'COMMA',1,'POINT')} +'%'"></td>
                 <td th:text="${countyStats.riskLevels.overall}"></td>
+                <td th:text="${#numbers.formatDecimal(countyStats.metrics.testPositivityRatio*100,1,'COMMA',1,'POINT')} +'%'"></td>
                 <td th:text="${#numbers.formatDecimal(countyStats.metrics.vaccinationsInitiatedRatio*100,1,'COMMA',1,'POINT')} + '%'"></td>
                 <td th:text="${#numbers.formatDecimal(countyStats.metrics.vaccinationsCompletedRatio*100,1,'COMMA',1,'POINT')} + '%'"></td>
             </tr>
