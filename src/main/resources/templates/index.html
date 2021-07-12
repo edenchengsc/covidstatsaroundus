@@ -235,7 +235,7 @@ Highcharts.getJSON(
                     mapData: countiesMap,
                     data: data,
                     joinBy: ['fips', 'fips'],
-                    name: '% Vaccinated',
+                    name: '% 1+ Dose Vaccinated',
                     tooltip: {
                         valueSuffix: '%'
                     },
@@ -669,7 +669,7 @@ Highcharts.getJSON(
                 color: '#FFFFFF',
                 format: '{point.code}'
             },
-            name: '% Full Vaccinated',
+            name: 'Risk Level',
             tooltip: {
                 pointFormat: '{point.code}: {point.value}'
             }
