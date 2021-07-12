@@ -13,11 +13,11 @@
         <div class="col-md-4 column">
         </div>
         <div align="right"  class="col-md-4 column">
-            <form class="navbar-form navbar-left" role="search" th:action="@{/searchCounty}" method="post">
+            <form class="navbar-form navbar-left" role="search" th:action="@{/}">
                 <div class="form-group">
-                    <input type="text" name = "fips" class="form-control" style="background-color:#edebf0"/>
+                    <input class="form-control" style="background-color:#edebf0" type="text"  name="fips" id="fips"  th:value="${fips}" required/>
                 </div>
-                <button type="submit" class="btn btn-default"  >Search</button>
+                <button type="submit" class="btn btn-default"  >Search by fips</button>
             </form>
         </div>
         <div align="right"  class="col-md-4 column">
@@ -33,13 +33,16 @@
             <div align="center"  class="col-md-6">
                 <h4>Over the last week,</h4>
                     <h1 class="display-1">
-                        <mark><span th:text="${countyName}"></span>,  <span th:text="${stateName}"></span></mark>
+                        <mark><span th:text="${countyName}"></span>,  <span th:text="${stateName}" id="stateName"></span></mark>
                 </h1>
                 <h4>has averaged <span class="badge badge-pill badge-info" th:text="${newConfirmedCasesPerDay}"></span> new confirmed cases per day,</h4>
                 <h4>and averaged <span class="badge badge-pill badge-info" th:text="${aveDailyDeath}"></span> daily deaths.
                 </h4>
                 <h4> <span class="badge badge-pill badge-info" th:text="${oneDoseVaccinatedRatio}"></span> people have received at least one dose,</h4>
                 <h4>and  <span class="badge badge-pill badge-info" th:text="${fullVaccinatedRatio}"></span> people are fully vaccinated. </h4>
+
+
+
             </div>
             <div class="col-md-6 column">
                 <div id="WAContainer" style="height: 250px; width: 500px; margin: 0 auto; text-align:center; line-height: 520px">
@@ -72,18 +75,19 @@
         <table class="table table-bordered table-hover">
             <thead class="thead-dark">
             <tr>
+                <th style="color:#4572A7;text-align:center">fips</th>
                 <th style="color:#4572A7;text-align:center">County (Population)</th>
                 <th style="color:#4572A7;text-align:center">Daily New Cases Per 100K</th>
                 <th style="color:#4572A7;text-align:center">Infection Rate</th>
                 <th style="color:#4572A7;text-align:center">Risk Level</th>
                 <th style="color:#4572A7;text-align:center">Positive Test Rate</th>
-
                 <th style="color:#4572A7;text-align:center">1+ Dose</th>
                 <th style="color:#4572A7;text-align:center">Fully Vaccinated</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="countyStats : ${selectedCountyStats}" style="text-align:center">
+                <td><a th:href="@{/?fips=} + ${countyStats.fips}" th:text="${countyStats.fips}"/></td>
                 <td th:text="${countyStats.county} +', ' +  ${countyStats.state} + '  ('+ ${countyStats.population}+  ')'"></td>
                 <td th:text="${countyStats.metrics.caseDensity}"></td>
                 <td th:text="${countyStats.metrics.infectionRate}"></td>
@@ -126,6 +130,12 @@
 <script src="https://code.highcharts.com/maps/modules/offline-exporting.js"></script>
 <script src="https://code.highcharts.com/mapdata/countries/us/us-all.js"></script>
 <script src="https://code.highcharts.com/mapdata/countries/us/us-wa-all.js"></script>
+<script src="https://code.highcharts.com/mapdata/countries/us/us-ca-all.js"></script>
+<script src="https://code.highcharts.com/mapdata/countries/us/us-hi-all.js"></script>
+<script src="https://code.highcharts.com/mapdata/countries/us/us-ny-all.js"></script>
+<script src="https://code.highcharts.com/mapdata/countries/us/us-vt-all.js"></script>
+<script src="https://code.highcharts.com/mapdata/countries/us/us-ma-all.js"></script>
+<script src="https://code.highcharts.com/mapdata/countries/us/us-fl-all.js"></script>
 
 <script th:inline="javascript">
 
@@ -133,10 +143,11 @@
             colors: ['#4572A7', '#99bde8', '#50B432', '#ED561B', '#DDDF00',  '#64E572', '#FF9655', '#FFF263', '#6AF9C4']
         });
 
-       var mapName = 'countries/us/us-wa-all'
+       var stateName = document.getElementById('stateName').textContent
+       var mapName = 'countries/us/us-' + stateName.toLowerCase() + '-all'
 
 Highcharts.getJSON(
-    'https://api.covidactnow.org/v2/county/WA.json?apiKey=e2592af2a51a42f6acedbe547a95e0da',
+    'https://api.covidactnow.org/v2/county/'+ stateName + '.json?apiKey=e2592af2a51a42f6acedbe547a95e0da',
     function (data) {
         var countiesMap = Highcharts.geojson(
                 Highcharts.maps[mapName]
@@ -177,7 +188,7 @@ Highcharts.getJSON(
                 },
 
                 title: {
-                    text: '% 1+ Dose Vaccinated in WA'
+                    text: '% 1+ Dose Vaccinated in ' + stateName
                 },
 
                 legend: {

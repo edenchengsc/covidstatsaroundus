@@ -9,8 +9,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.*;
 import java.net.URL;
@@ -22,16 +24,22 @@ import java.util.stream.Collectors;
 @Service
 public class CovidDataService {
 
-
     private static final Logger log = LoggerFactory.getLogger(CovidStatsAroundUsApplication.class);
 
     private static String FILE_DIR = "./jsonFile";
     private static String APIKEY = "e2592af2a51a42f6acedbe547a95e0da";
     private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-
     private static Map<String, String> countyList = new HashMap<>();
     private List<County> allCountyStats = new ArrayList<>();
+
+    private String fips = "";
+    public String getFips() {
+        return fips;
+    }
+
+    public void setFips(String fips) {
+        this.fips = fips;
+    }
 
     public County getSpecifiedCounty() {
         return specifiedCounty;
@@ -65,54 +73,28 @@ public class CovidDataService {
 
     public Map<String, String> apiURL_Files = new HashMap<>();
 
-
     @Bean
     public CommandLineRunner run() throws Exception {
         return args -> {
             setApiFiles();
             checkJsonFiles();
+            getCountyData(fips);
 
-            // Single county data
-            try {
-                ObjectMapper mapper = new ObjectMapper();
-                String fileName = FILE_DIR + File.separator + "Single_County_Timeseries.json";
-                InputStream jsonFileStream = new FileInputStream(fileName);
-                County county = (County) mapper.readValue(jsonFileStream, County.class);
-                log.info(county.toString());
-                this.specifiedCounty = county;
-
-                this.specifiedCountyActualsTimeseries = Arrays.stream(county.getActualsTimeseries())
-                        .filter(a -> in30Days(a.getDate()))
-                        .collect(Collectors.toList());
-                log.info("specifiedCountyActualsTimeseries : " + this.specifiedCountyActualsTimeseries.size());
-            } catch (Exception e){
-                log.info("Exceptions here: " + e.toString());
-            }
-
-            //List of County
+            //Defaut List of County
             countyList.put("King County", "WA");
             countyList.put("Orange County", "CA");
             countyList.put("New York County", "NY");
             countyList.put("Honolulu County", "HI");
-            try {
-                ObjectMapper mapper = new ObjectMapper();
-                String fileName = FILE_DIR + File.separator + "All_County_Summary.json";
-                InputStream jsonFileStream = new FileInputStream(fileName);
-                County[] counties = (County[]) mapper.readValue(jsonFileStream, County[].class);
-                log.info(counties.toString());
-                for(County county : counties){
-                       if(countyList.keySet().contains(county.getCounty()) && county.getState().equals(countyList.get(county.getCounty()))){
-                           this.allCountyStats.add(county);
-                       }
-                }
-                log.info("allCountyStats size : " + this.allCountyStats.size());
-            } catch (Exception e){
-                log.info("Exceptions here: " + e.toString());
-            }
+            setCountyTableContent();
 
             //All states stats
             loadAllStateStats();
         };
+    }
+
+    @Bean
+    public RestTemplate restTemplate(RestTemplateBuilder builder) {
+        return builder.build();
     }
 
     private void setApiFiles() {
@@ -126,6 +108,67 @@ public class CovidDataService {
             url = url.replace("{fips}", "53033"); // 53033 king county
         }
         return url.replace("{apiKey}", APIKEY);
+    }
+
+    public void getCountyData(String fips){
+        try {
+            if(fips != ""){
+                //get live
+                RestTemplate restTemplate = new RestTemplate();
+                String apiURL = "https://api.covidactnow.org/v2/county/" + fips + ".timeseries.json?apiKey=e2592af2a51a42f6acedbe547a95e0da";
+                System.out.println("This is " + apiURL);
+                County countyStats = restTemplate.getForObject(
+                        apiURL, County.class);
+                log.info(countyStats.toString());
+                this.specifiedCounty = countyStats;
+
+                this.specifiedCountyActualsTimeseries = Arrays.stream(countyStats.getActualsTimeseries())
+                        .filter(a -> in30Days(a.getDate()))
+                        .collect(Collectors.toList());
+                log.info("specifiedCountyActualsTimeseries : " + this.specifiedCountyActualsTimeseries.size());
+
+                //add to the comparison table if not included.
+                if(!countyList.containsKey(countyStats.getCounty())){
+                    countyList.put(countyStats.getCounty(), countyStats.getState());
+                    //reset to empty
+                    this.allCountyStats = new ArrayList<>();
+                    setCountyTableContent();
+                }
+            } else {
+                // Single county data
+                ObjectMapper mapper = new ObjectMapper();
+                String fileName = FILE_DIR + File.separator + "Single_County_Timeseries.json";
+                InputStream jsonFileStream = new FileInputStream(fileName);
+                County county = (County) mapper.readValue(jsonFileStream, County.class);
+                log.info(county.toString());
+                this.specifiedCounty = county;
+
+                this.specifiedCountyActualsTimeseries = Arrays.stream(county.getActualsTimeseries())
+                        .filter(a -> in30Days(a.getDate()))
+                        .collect(Collectors.toList());
+                log.info("specifiedCountyActualsTimeseries : " + this.specifiedCountyActualsTimeseries.size());
+            }
+        } catch (Exception e){
+            log.info("Exceptions here: " + e.toString());
+        }
+    }
+
+    public void setCountyTableContent(){
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            String fileName = FILE_DIR + File.separator + "All_County_Summary.json";
+            InputStream jsonFileStream = new FileInputStream(fileName);
+            County[] counties = (County[]) mapper.readValue(jsonFileStream, County[].class);
+            log.info(counties.toString());
+            for(County county : counties){
+                if(countyList.keySet().contains(county.getCounty()) && county.getState().equals(countyList.get(county.getCounty()))){
+                    this.allCountyStats.add(county);
+                }
+            }
+            log.info("allCountyStats size : " + this.allCountyStats.size());
+        } catch (Exception e){
+            log.info("Exceptions here: " + e.toString());
+        }
     }
 
     private void loadAllStateStats() throws IOException {
@@ -153,10 +196,12 @@ public class CovidDataService {
 
         return today30.before(dataDate);
     }
+
     /*
      Check if the .json files are local ready.
      If not or too old, download again
      */
+
     public void checkJsonFiles() throws IOException {
         String dirPath = new File("").getAbsolutePath() + File.separator + "jsonFile";
         File dir = new File(dirPath);

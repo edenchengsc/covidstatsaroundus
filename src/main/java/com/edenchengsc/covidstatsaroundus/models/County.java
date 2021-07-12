@@ -4,11 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class County {
+    private String fips;
     private String state;
     private String county;
     private String country;
     private int population;
     private Metrics metrics;
+    private RiskLevels riskLevels;
 
     public Metrics[] getMetricsTimeseries() {
         return metricsTimeseries;
@@ -32,6 +34,13 @@ public class County {
     private Actuals[] actualsTimeseries;
     private String lastUpdatedDate;
 
+    public String getFips() {
+        return fips;
+    }
+
+    public void setFips(String fips) {
+        this.fips = fips;
+    }
     public String getState() {
         return state;
     }
@@ -87,6 +96,15 @@ public class County {
 
     public void setLastUpdatedDate(String lastUpdatedDate) {
         this.lastUpdatedDate = lastUpdatedDate;
+    }
+
+
+    public RiskLevels getRiskLevels() {
+        return riskLevels;
+    }
+
+    public void setRiskLevels(RiskLevels riskLevels) {
+        this.riskLevels = riskLevels;
     }
 
     @Override

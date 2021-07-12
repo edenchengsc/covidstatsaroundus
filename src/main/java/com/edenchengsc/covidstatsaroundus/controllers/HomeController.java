@@ -7,9 +7,7 @@ import com.edenchengsc.covidstatsaroundus.service.CovidDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.DecimalFormat;
 import java.util.*;
@@ -22,29 +20,23 @@ public class HomeController {
     @Autowired
     CovidDataService covidDataService;
 
-    @RequestMapping("/searchCounty")
-    public String addActivityAction(@RequestParam("fips") String fips )   {
-        return "index";
-    }
-
     @GetMapping("/")
-    public String home(Model model){
+    public String home(Model model, @RequestParam (value = "fips", required = false) String fips){
+        System.out.println("fips:" + fips);
+
+        if(fips != null && fips != ""){
+            covidDataService.getCountyData(fips);
+        }
+
         //Single County data
         County specifiedCounty = covidDataService.getSpecifiedCounty();
         model.addAttribute ("countyName", specifiedCounty.getCounty());
         model.addAttribute ("stateName", specifiedCounty.getState());
         model.addAttribute ("lastUpdatedDate", specifiedCounty.getLastUpdatedDate());
 
-
         //Comparation table
         List<County> allCountyStats = covidDataService.getCounties();
-//        Map<String, Integer> data = new LinkedHashMap<>();
-//        for(County county : allCountyStats){
-//            int roundOff = (int) Math.round(county.getMetrics().getVaccinationsCompletedRatio() * 10000) / 100;
-//            data.put(county.getCounty().replace(" County", ""), roundOff);
-//        }
         model.addAttribute("selectedCountyStats", allCountyStats);
-
 
         //line chart new cases/new death
         List<Actuals>  specifiedCountyActualsTimeseries = covidDataService.getSpecifiedCountyActualsTimeseries();
@@ -54,7 +46,6 @@ public class HomeController {
                 return  Integer.parseInt(o1.getDate().replace("-", "")) - Integer.parseInt(o2.getDate().replace("-", ""));
             }
         });
-
 
         double newConfirmedCases7DaysSum = 0;
         double dailyDeath7DaysSum = 0;
@@ -88,15 +79,13 @@ public class HomeController {
         model.addAttribute ("newConfirmedCasesPerDay", df2.format(newConfirmedCases7DaysSum/7));
         model.addAttribute ("aveDailyDeath", df2.format(dailyDeath7DaysSum/7));
         model.addAttribute ("oneDoseVaccinatedRatio", specifiedCounty.getMetrics().getVaccinationsInitiatedRatio()*10000/100 + "%");
-        model.addAttribute ("fullVaccinatedRatio", specifiedCounty.getMetrics().getVaccinationsCompletedRatio()*10000/100+ "%");
-
+        model.addAttribute ("fullVaccinatedRatio",  specifiedCounty.getMetrics().getVaccinationsCompletedRatio()*10000/100+ "%");
 
         model.addAttribute("Dates", dataArr);
         model.addAttribute("NewCases", newCasesNumArr);
         model.addAttribute("NewDeaths", newDeathNumArr);
         model.addAttribute("TotalCases", totalCasesNumArr);
         model.addAttribute("TotalDeaths", totalDeathNumArr);
-
 
         //Vaccine Bar Chart
         List<State> allStateStats = covidDataService.getStateStats();
@@ -162,7 +151,4 @@ public class HomeController {
 
         return "newCaseLineChart";
     }
-
-
-
 }
