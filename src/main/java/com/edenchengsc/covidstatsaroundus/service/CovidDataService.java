@@ -116,12 +116,10 @@ public class CovidDataService {
                 //get live
                 RestTemplate restTemplate = new RestTemplate();
                 String apiURL = "https://api.covidactnow.org/v2/county/" + fips + ".timeseries.json?apiKey=e2592af2a51a42f6acedbe547a95e0da";
-                System.out.println("This is " + apiURL);
                 County countyStats = restTemplate.getForObject(
                         apiURL, County.class);
-                log.info(countyStats.toString());
+                log.info("Getting county " + countyStats.getCounty() + " fips:" + fips);
                 this.specifiedCounty = countyStats;
-
                 this.specifiedCountyActualsTimeseries = Arrays.stream(countyStats.getActualsTimeseries())
                         .filter(a -> in30Days(a.getDate()))
                         .collect(Collectors.toList());
@@ -140,16 +138,15 @@ public class CovidDataService {
                 String fileName = FILE_DIR + File.separator + "Single_County_Timeseries.json";
                 InputStream jsonFileStream = new FileInputStream(fileName);
                 County county = (County) mapper.readValue(jsonFileStream, County.class);
-                log.info(county.toString());
+                log.info("Getting single county Timeseries: " + county.getCounty() );
                 this.specifiedCounty = county;
-
                 this.specifiedCountyActualsTimeseries = Arrays.stream(county.getActualsTimeseries())
                         .filter(a -> in30Days(a.getDate()))
                         .collect(Collectors.toList());
                 log.info("specifiedCountyActualsTimeseries : " + this.specifiedCountyActualsTimeseries.size());
             }
         } catch (Exception e){
-            log.info("Exceptions here: " + e.toString());
+            log.error("Exceptions here: " + e.toString());
         }
     }
 
@@ -167,7 +164,7 @@ public class CovidDataService {
             }
             log.info("allCountyStats size : " + this.allCountyStats.size());
         } catch (Exception e){
-            log.info("Exceptions here: " + e.toString());
+            log.error("Exceptions here: " + e.toString());
         }
     }
 
@@ -207,7 +204,7 @@ public class CovidDataService {
         File dir = new File(dirPath);
         if(!dir.exists()){
             dir.mkdir();
-            System.out.println("Create dir:" + dirPath);
+            log.info("Create dir:" + dirPath);
         }
 
         //String sourceURL, String targetDirectory, String fileName
@@ -217,16 +214,16 @@ public class CovidDataService {
                 String fileDate =  sdf.format(file.lastModified());
                 String today = sdf.format(new Date().getTime());
                 if (today.equals(fileDate)){
-                     System.out.println("Latest version exists: " + fileDate);
+                    log.info("Latest version exists: " + fileDate);
                      continue;
                 }
             }
             URL url = new URL(formatURL(this.apiURL_Files.get(fileName)));
             Path targetPath = file.toPath();
             if(file.createNewFile()){
-                System.out.println(targetPath +" File Created");
+                log.info(targetPath +" File Created");
             }else {
-                System.out.println("File "+ targetPath +" already exists");
+                log.info("File "+ targetPath +" already exists");
             }
             Files.copy(url.openStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
         }

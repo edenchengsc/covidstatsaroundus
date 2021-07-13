@@ -22,8 +22,6 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model, @RequestParam (value = "fips", required = false) String fips){
-        System.out.println("fips:" + fips);
-
         if(fips != null && fips != ""){
             covidDataService.getCountyData(fips);
         }

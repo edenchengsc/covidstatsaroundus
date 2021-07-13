@@ -25,12 +25,11 @@
                         </h6>
         </div>
     </div>
-    <div style="background-color: #ffffff">
-        <div class="container-lg" >
-
+    <div class="clearfix" >
+        <div class="container-lg" style="background-color: #ffffff">
                 <h6 align="left">Updated on: <span  class="badge badge-light"  th:text="${lastUpdatedDate}"></span>
                 </h6>
-            <div align="center"  class="col-md-6">
+            <div align="center"  class="col-md-6" >
                 <h4>Over the last week,</h4>
                     <h1 class="display-1">
                         <mark><span th:text="${countyName}"></span>,  <span th:text="${stateName}" id="stateName"></span></mark>
@@ -40,9 +39,6 @@
                 </h4>
                 <h4> <span class="badge badge-pill badge-info" th:text="${oneDoseVaccinatedRatio}"></span> people have received at least one dose,</h4>
                 <h4>and  <span class="badge badge-pill badge-info" th:text="${fullVaccinatedRatio}"></span> people are fully vaccinated. </h4>
-
-
-
             </div>
             <div class="col-md-6 column">
                 <div id="WAContainer" style="height: 250px; width: 500px; margin: 0 auto; text-align:center; line-height: 520px">
@@ -50,10 +46,10 @@
                 </div>
             </div>
         <div>
-        <div class="container-lg" >
-            <h3>
+        <div class="container-lg clearfix">
+            <div><h3>
                 Recently 30 days
-            </h3>
+            </h3></div>
             <div class="row clearfix">
                 <div class="col-md-3 column" id="newCaseLineChartContainer"
                      style="width: 290px; height: 200px; margin: 0 auto">
@@ -70,7 +66,7 @@
             </div>
         </div>
     </div>
-    <div class="container-lg  table-responsive  clearfix">
+    <div class="container-lg  table-responsive  clearfix" style="background-color: #ffffff">
         <h3>Counties</h3>
         <table class="table table-bordered table-hover">
             <thead class="thead-dark">
@@ -99,8 +95,8 @@
             </tbody>
         </table>
     </div>
-    <div class="row clearfix">
-        <h2 align="left">In the US</h2>
+    <div class="container-lg clearfix">
+        <h3>In the US</h3>
         <div class="col-md-6 column">
             <div class="container-md">
                 <div id="mapContainer"></div>
@@ -129,13 +125,59 @@
 <script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/maps/modules/offline-exporting.js"></script>
 <script src="https://code.highcharts.com/mapdata/countries/us/us-all.js"></script>
-<script src="https://code.highcharts.com/mapdata/countries/us/us-wa-all.js"></script>
-<script src="https://code.highcharts.com/mapdata/countries/us/us-ca-all.js"></script>
-<script src="https://code.highcharts.com/mapdata/countries/us/us-hi-all.js"></script>
-<script src="https://code.highcharts.com/mapdata/countries/us/us-ny-all.js"></script>
-<script src="https://code.highcharts.com/mapdata/countries/us/us-vt-all.js"></script>
-<script src="https://code.highcharts.com/mapdata/countries/us/us-ma-all.js"></script>
-<script src="https://code.highcharts.com/mapdata/countries/us/us-fl-all.js"></script>
+<script src="../style/js/us-ak-all.js"></script>
+<script src="../style/js/us-al-all.js"></script>
+<script src="../style/js/us-ar-all.js"></script>
+<script src="../style/js/us-az-all.js"></script>
+<script src="../style/js/us-ca-all.js"></script>
+<script src="../style/js/us-co-all.js"></script>
+<script src="../style/js/us-ct-all.js"></script>
+<script src="../style/js/us-dc-all.js"></script>
+<script src="../style/js/us-de-all.js"></script>
+<script src="../style/js/us-fl-all.js"></script>
+<script src="../style/js/us-ga-all.js"></script>
+<script src="../style/js/us-hi-all.js"></script>
+<script src="../style/js/us-ia-all.js"></script>
+<script src="../style/js/us-id-all.js"></script>
+<script src="../style/js/us-il-all.js"></script>
+<script src="../style/js/us-in-all.js"></script>
+<script src="../style/js/us-ks-all.js"></script>
+<script src="../style/js/us-ky-all.js"></script>
+<script src="../style/js/us-la-all.js"></script>
+<script src="../style/js/us-ma-all.js"></script>
+<script src="../style/js/us-md-all.js"></script>
+<script src="../style/js/us-me-all.js"></script>
+<script src="../style/js/us-mi-all.js"></script>
+<script src="../style/js/us-mn-all.js"></script>
+<script src="../style/js/us-mo-all.js"></script>
+<script src="../style/js/us-mp-all.js"></script>
+<script src="../style/js/us-ms-all.js"></script>
+<script src="../style/js/us-mt-all.js"></script>
+<script src="../style/js/us-nc-all.js"></script>
+<script src="../style/js/us-nd-all.js"></script>
+<script src="../style/js/us-ne-all.js"></script>
+<script src="../style/js/us-nh-all.js"></script>
+<script src="../style/js/us-nj-all.js"></script>
+<script src="../style/js/us-nm-all.js"></script>
+<script src="../style/js/us-nv-all.js"></script>
+<script src="../style/js/us-ny-all.js"></script>
+<script src="../style/js/us-oh-all.js"></script>
+<script src="../style/js/us-ok-all.js"></script>
+<script src="../style/js/us-or-all.js"></script>
+<script src="../style/js/us-pa-all.js"></script>
+<script src="../style/js/us-pr-all.js"></script>
+<script src="../style/js/us-ri-all.js"></script>
+<script src="../style/js/us-sc-all.js"></script>
+<script src="../style/js/us-sd-all.js"></script>
+<script src="../style/js/us-tn-all.js"></script>
+<script src="../style/js/us-tx-all.js"></script>
+<script src="../style/js/us-ut-all.js"></script>
+<script src="../style/js/us-va-all.js"></script>
+<script src="../style/js/us-vt-all.js"></script>
+<script src="../style/js/us-wa-all.js"></script>
+<script src="../style/js/us-wi-all.js"></script>
+<script src="../style/js/us-wv-all.js"></script>
+<script src="../style/js/us-wy-all.js"></script>
 
 <script th:inline="javascript">
 
