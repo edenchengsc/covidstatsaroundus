@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.*;
 
@@ -20,8 +21,11 @@ public class HomeController {
     @Autowired
     CovidDataService covidDataService;
 
+
     @GetMapping("/")
-    public String home(Model model, @RequestParam (value = "fips", required = false) String fips){
+    public String home(Model model, @RequestParam (value = "fips", required = false) String fips) throws IOException {
+
+        covidDataService = new CovidDataService();
         if(fips != null && fips != ""){
             covidDataService.getCountyData(fips);
         }
@@ -113,40 +117,5 @@ public class HomeController {
         model.addAttribute("vaccinationsCompletedRatioValues", fullRatioPercentage);
 
         return "index";
-    }
-
-    @GetMapping("/newCaseLineChart")
-    public String newCaseLineChart(Model model){
-
-
-        //line chart new cases/new death
-        List<Actuals>  specifiedCountyActualsTimeseries = covidDataService.getSpecifiedCountyActualsTimeseries();
-        Collections.sort(specifiedCountyActualsTimeseries, new Comparator<Actuals>() {
-            @Override
-            public int compare(Actuals o1, Actuals o2) {
-                return  Integer.parseInt(o1.getDate().replace("-", "")) - Integer.parseInt(o2.getDate().replace("-", ""));
-            }
-        });
-
-        Map<String, Integer> newCasesMap = new HashMap<>();
-        Map<String, Integer> newDeathMap = new HashMap<>();
-        Map<String, Integer> totalCasesMap = new HashMap<>();
-        Map<String, Integer> totalDeathMap = new HashMap<>();
-
-        for(Actuals actuals : specifiedCountyActualsTimeseries){
-            //System.out.println(actuals.getDate() + ": " + actuals.getNewCases());
-            newCasesMap.put(actuals.getDate(), actuals.getNewCases());
-            newDeathMap.put(actuals.getDate(), actuals.getNewDeaths());
-            totalCasesMap.put(actuals.getDate(), actuals.getCases());
-            totalDeathMap.put(actuals.getDate(), actuals.getDeaths());
-        }
-
-        model.addAttribute("Dates", newCasesMap.keySet());
-        model.addAttribute("NewCases", newCasesMap.values());
-        model.addAttribute("NewDeaths", newDeathMap.values());
-        model.addAttribute("TotalCases", totalCasesMap.values());
-        model.addAttribute("TotalDeaths", totalDeathMap.values());
-
-        return "newCaseLineChart";
     }
 }

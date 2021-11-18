@@ -73,24 +73,40 @@ public class CovidDataService {
 
     public Map<String, String> apiURL_Files = new HashMap<>();
 
-    @Bean
-    public CommandLineRunner run() throws Exception {
-        return args -> {
-            setApiFiles();
-            checkJsonFiles();
-            getCountyData(fips);
+    public CovidDataService() throws IOException {
+        setApiFiles();
+        checkJsonFiles();
+        getCountyData(fips);
 
-            //Defaut List of County
-            countyList.put("King County", "WA");
-            countyList.put("Orange County", "CA");
-            countyList.put("New York County", "NY");
-            countyList.put("Honolulu County", "HI");
-            setCountyTableContent();
+        //Defaut List of County
+        countyList.put("King County", "WA");
+        countyList.put("Orange County", "CA");
+        countyList.put("New York County", "NY");
+        countyList.put("Honolulu County", "HI");
+        setCountyTableContent();
 
-            //All states stats
-            loadAllStateStats();
-        };
+        //All states stats
+        loadAllStateStats();
     }
+
+//    @Bean
+//    public CommandLineRunner run() throws Exception {
+//        return args -> {
+//            setApiFiles();
+//            checkJsonFiles();
+//            getCountyData(fips);
+//
+//            //Defaut List of County
+//            countyList.put("King County", "WA");
+//            countyList.put("Orange County", "CA");
+//            countyList.put("New York County", "NY");
+//            countyList.put("Honolulu County", "HI");
+//            setCountyTableContent();
+//
+//            //All states stats
+//            loadAllStateStats();
+//        };
+//    }
 
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
@@ -198,7 +214,6 @@ public class CovidDataService {
      Check if the .json files are local ready.
      If not or too old, download again
      */
-
     public void checkJsonFiles() throws IOException {
         String dirPath = new File("").getAbsolutePath() + File.separator + "jsonFile";
         File dir = new File(dirPath);

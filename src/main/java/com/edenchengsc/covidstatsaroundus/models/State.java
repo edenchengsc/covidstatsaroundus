@@ -45,6 +45,16 @@ public class State {
     private String url;
     private Metrics metrics;
 
+    public RiskLevels getRiskLevels() {
+        return riskLevels;
+    }
+
+    public void setRiskLevels(RiskLevels riskLevels) {
+        this.riskLevels = riskLevels;
+    }
+
+    private RiskLevels riskLevels;
+
     @Override
     public String toString() {
         return "Value{" +
