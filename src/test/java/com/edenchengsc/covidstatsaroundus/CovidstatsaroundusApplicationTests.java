@@ -23,7 +23,8 @@ class CovidstatsaroundusApplicationTests {
     @Test
     void checkJsonFilesTest() throws IOException {
         covidDataService.checkJsonFiles();
-        File directory=new File(covidDataService.FILE_DIR);
+        String dirPath = new File("").getAbsolutePath() + File.separator + "jsonFile";
+        File directory =new File(dirPath);
         for(String s : directory.list()){
             System.out.println("File name:"+ s);
         }
