@@ -1,5 +1,5 @@
  
-Tech Stack: API Integration | Spring Boot | HTML | Bootstrap | Thymeleaf | Highcharts
+Tech Stack: API Integration | Spring Boot | HTML | Bootstrap | Thymeleaf | Highcharts | AWS
 
  
 A web page showing the latest covid cases and vaccination data at county level
@@ -12,4 +12,4 @@ A web page showing the latest covid cases and vaccination data at county level
 
 * Dynamic generates country-wide risk level map and vaccination ratio chart  
 
-* Deployed on AWS with elastic beanstalk service 
+* Deployed on AWS with elastic beanstalk service, [Link](http://covidaround.us-east-2.elasticbeanstalk.com/).
